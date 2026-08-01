@@ -39,9 +39,9 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A suited cyclist crossing a city square in black and white."
   },
   {
-    "id": "work-067",
-    "filename": "red-dress-blue-doorway.webp",
-    "width": 2134,
+    "id": "work-066",
+    "filename": "woman-red-cloud-painted-wall.webp",
+    "width": 2133,
     "height": 3200,
     "captureMonth": "May",
     "captureYear": 2024,
@@ -49,7 +49,7 @@ window.PORTFOLIO_PHOTOS = [
     "tags": [
       "portrait"
     ],
-    "alt": "A woman in a red dress framed by a blue cloud-painted doorway."
+    "alt": "A woman in red posing against a cloud-painted blue wall."
   },
   {
     "id": "work-043",
@@ -76,19 +76,6 @@ window.PORTFOLIO_PHOTOS = [
       "wildlife"
     ],
     "alt": "A crocodile eye and ridged head emerging through green duckweed."
-  },
-  {
-    "id": "work-002",
-    "filename": "woman-red-blue-doorway.webp",
-    "width": 3200,
-    "height": 3200,
-    "captureMonth": "May",
-    "captureYear": 2024,
-    "sensitivity": "none",
-    "tags": [
-      "portrait"
-    ],
-    "alt": "A close portrait of a woman in red beside a vivid blue doorway."
   },
   {
     "id": "work-004",
@@ -169,17 +156,17 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A woman in a red dress lying across geometric stone steps."
   },
   {
-    "id": "work-008",
-    "filename": "red-fox-wildlife-trap.webp",
+    "id": "work-036",
+    "filename": "neon-parking-garage-portrait.webp",
     "width": 3200,
-    "height": 2219,
-    "captureMonth": "August",
-    "captureYear": 2023,
+    "height": 2133,
+    "captureMonth": "January",
+    "captureYear": 2025,
     "sensitivity": "none",
     "tags": [
-      "wildlife"
+      "portrait"
     ],
-    "alt": "A red fox looking through the bars of a humane wildlife trap."
+    "alt": "A woman seated in a shopping cart in a neon-lit parking garage."
   },
   {
     "id": "work-013",
@@ -208,17 +195,17 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A woman in a short black dress standing between pink buildings."
   },
   {
-    "id": "work-036",
-    "filename": "neon-parking-garage-portrait.webp",
+    "id": "work-008",
+    "filename": "red-fox-wildlife-trap.webp",
     "width": 3200,
-    "height": 2133,
-    "captureMonth": "January",
-    "captureYear": 2025,
+    "height": 2219,
+    "captureMonth": "August",
+    "captureYear": 2023,
     "sensitivity": "none",
     "tags": [
-      "portrait"
+      "wildlife"
     ],
-    "alt": "A woman seated in a shopping cart in a neon-lit parking garage."
+    "alt": "A red fox looking through the bars of a humane wildlife trap."
   },
   {
     "id": "work-015",
@@ -780,9 +767,9 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A woman in a red dress seated in warm reflected light."
   },
   {
-    "id": "work-066",
-    "filename": "woman-red-cloud-painted-wall.webp",
-    "width": 2133,
+    "id": "work-067",
+    "filename": "red-dress-blue-doorway.webp",
+    "width": 2134,
     "height": 3200,
     "captureMonth": "May",
     "captureYear": 2024,
@@ -790,7 +777,20 @@ window.PORTFOLIO_PHOTOS = [
     "tags": [
       "portrait"
     ],
-    "alt": "A woman in red posing against a cloud-painted blue wall."
+    "alt": "A woman in a red dress framed by a blue cloud-painted doorway."
+  },
+  {
+    "id": "work-002",
+    "filename": "woman-red-blue-doorway.webp",
+    "width": 3200,
+    "height": 3200,
+    "captureMonth": "May",
+    "captureYear": 2024,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A close portrait of a woman in red beside a vivid blue doorway."
   },
   {
     "id": "work-068",
