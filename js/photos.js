@@ -1,5 +1,18 @@
 window.PORTFOLIO_PHOTOS = [
   {
+    "id": "work-033",
+    "filename": "reclining-figure-magenta-light.webp",
+    "width": 2133,
+    "height": 3200,
+    "captureMonth": "January",
+    "captureYear": 2025,
+    "sensitivity": "none",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A reclining figure in black lingerie beneath magenta and violet light."
+  },
+  {
     "id": "work-001",
     "filename": "hiker-stormy-mountain-ridge.webp",
     "width": 2891,
@@ -13,9 +26,22 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A lone hiker crossing a broad mountain ridge beneath storm clouds."
   },
   {
-    "id": "work-002",
-    "filename": "woman-red-blue-doorway.webp",
+    "id": "work-040",
+    "filename": "cyclist-city-square-monochrome.webp",
     "width": 3200,
+    "height": 2346,
+    "captureMonth": "July",
+    "captureYear": 2024,
+    "sensitivity": "none",
+    "tags": [
+      "travel"
+    ],
+    "alt": "A suited cyclist crossing a city square in black and white."
+  },
+  {
+    "id": "work-067",
+    "filename": "red-dress-blue-doorway.webp",
+    "width": 2134,
     "height": 3200,
     "captureMonth": "May",
     "captureYear": 2024,
@@ -23,7 +49,20 @@ window.PORTFOLIO_PHOTOS = [
     "tags": [
       "portrait"
     ],
-    "alt": "A close portrait of a woman in red beside a vivid blue doorway."
+    "alt": "A woman in a red dress framed by a blue cloud-painted doorway."
+  },
+  {
+    "id": "work-043",
+    "filename": "woman-sunglasses-city-crowd.webp",
+    "width": 2356,
+    "height": 3200,
+    "captureMonth": "July",
+    "captureYear": 2024,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A stylish woman in sunglasses seen through a city crowd."
   },
   {
     "id": "work-003",
@@ -37,6 +76,19 @@ window.PORTFOLIO_PHOTOS = [
       "wildlife"
     ],
     "alt": "A crocodile eye and ridged head emerging through green duckweed."
+  },
+  {
+    "id": "work-002",
+    "filename": "woman-red-blue-doorway.webp",
+    "width": 3200,
+    "height": 3200,
+    "captureMonth": "May",
+    "captureYear": 2024,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A close portrait of a woman in red beside a vivid blue doorway."
   },
   {
     "id": "work-004",
@@ -91,17 +143,17 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "Wind-bent tropical leaves beyond a black balcony railing."
   },
   {
-    "id": "work-008",
-    "filename": "red-fox-wildlife-trap.webp",
+    "id": "work-012",
+    "filename": "blue-gold-macaw-branches.webp",
     "width": 3200,
-    "height": 2219,
+    "height": 2277,
     "captureMonth": "August",
-    "captureYear": 2023,
+    "captureYear": 2026,
     "sensitivity": "none",
     "tags": [
       "wildlife"
     ],
-    "alt": "A red fox looking through the bars of a humane wildlife trap."
+    "alt": "A blue-and-gold macaw feeding among green branches."
   },
   {
     "id": "work-009",
@@ -117,43 +169,17 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A woman in a red dress lying across geometric stone steps."
   },
   {
-    "id": "work-010",
-    "filename": "suspended-water-droplets.webp",
-    "width": 1149,
-    "height": 1593,
-    "captureMonth": "August",
-    "captureYear": 2026,
-    "sensitivity": "none",
-    "tags": [
-      "landscape"
-    ],
-    "alt": "Fine water droplets suspended like beads against a dark green background."
-  },
-  {
-    "id": "work-011",
-    "filename": "weathered-apple-winter-branches.webp",
-    "width": 2665,
-    "height": 1785,
-    "captureMonth": "August",
-    "captureYear": 2026,
-    "sensitivity": "none",
-    "tags": [
-      "landscape"
-    ],
-    "alt": "A weathered red apple hanging from bare winter branches."
-  },
-  {
-    "id": "work-012",
-    "filename": "blue-gold-macaw-branches.webp",
+    "id": "work-008",
+    "filename": "red-fox-wildlife-trap.webp",
     "width": 3200,
-    "height": 2277,
+    "height": 2219,
     "captureMonth": "August",
-    "captureYear": 2026,
+    "captureYear": 2023,
     "sensitivity": "none",
     "tags": [
       "wildlife"
     ],
-    "alt": "A blue-and-gold macaw feeding among green branches."
+    "alt": "A red fox looking through the bars of a humane wildlife trap."
   },
   {
     "id": "work-013",
@@ -180,6 +206,19 @@ window.PORTFOLIO_PHOTOS = [
       "portrait"
     ],
     "alt": "A woman in a short black dress standing between pink buildings."
+  },
+  {
+    "id": "work-036",
+    "filename": "neon-parking-garage-portrait.webp",
+    "width": 3200,
+    "height": 2133,
+    "captureMonth": "January",
+    "captureYear": 2025,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A woman seated in a shopping cart in a neon-lit parking garage."
   },
   {
     "id": "work-015",
@@ -312,19 +351,6 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A rounded green mountain beneath a textured blue sky."
   },
   {
-    "id": "work-025",
-    "filename": "mountain-peak-sunlit-clouds.webp",
-    "width": 2133,
-    "height": 3200,
-    "captureMonth": "December",
-    "captureYear": 2025,
-    "sensitivity": "none",
-    "tags": [
-      "landscape"
-    ],
-    "alt": "A mountain peak rising beneath dramatic sunlit clouds."
-  },
-  {
     "id": "work-026",
     "filename": "sunlit-mountain-forest-path.webp",
     "width": 2183,
@@ -336,19 +362,6 @@ window.PORTFOLIO_PHOTOS = [
       "landscape"
     ],
     "alt": "A sunlit path crossing a mountain forest."
-  },
-  {
-    "id": "work-027",
-    "filename": "figure-stretching-open-field.webp",
-    "width": 2133,
-    "height": 3200,
-    "captureMonth": "May",
-    "captureYear": 2025,
-    "sensitivity": "sensitive",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A nude figure stretching upward in an open field beneath a blue sky."
   },
   {
     "id": "work-028",
@@ -375,6 +388,19 @@ window.PORTFOLIO_PHOTOS = [
       "figure study"
     ],
     "alt": "A nude figure reclining lengthwise on a mossy fallen tree."
+  },
+  {
+    "id": "work-027",
+    "filename": "figure-stretching-open-field.webp",
+    "width": 2133,
+    "height": 3200,
+    "captureMonth": "May",
+    "captureYear": 2025,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure stretching upward in an open field beneath a blue sky."
   },
   {
     "id": "work-030",
@@ -416,19 +442,6 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A stark silhouette of a pruned tree against a pale sky."
   },
   {
-    "id": "work-033",
-    "filename": "reclining-figure-magenta-light.webp",
-    "width": 2133,
-    "height": 3200,
-    "captureMonth": "January",
-    "captureYear": 2025,
-    "sensitivity": "none",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A reclining figure in black lingerie beneath magenta and violet light."
-  },
-  {
     "id": "work-034",
     "filename": "lace-portrait-rainbow-light.webp",
     "width": 2133,
@@ -440,19 +453,6 @@ window.PORTFOLIO_PHOTOS = [
       "figure study"
     ],
     "alt": "A figure in dark lace underwear crossed by rainbow-colored light."
-  },
-  {
-    "id": "work-036",
-    "filename": "neon-parking-garage-portrait.webp",
-    "width": 3200,
-    "height": 2133,
-    "captureMonth": "January",
-    "captureYear": 2025,
-    "sensitivity": "none",
-    "tags": [
-      "portrait"
-    ],
-    "alt": "A woman seated in a shopping cart in a neon-lit parking garage."
   },
   {
     "id": "work-037",
@@ -494,19 +494,6 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A partially nude figure standing in tall reeds beneath a bright sky."
   },
   {
-    "id": "work-040",
-    "filename": "cyclist-city-square-monochrome.webp",
-    "width": 3200,
-    "height": 2346,
-    "captureMonth": "July",
-    "captureYear": 2024,
-    "sensitivity": "none",
-    "tags": [
-      "travel"
-    ],
-    "alt": "A suited cyclist crossing a city square in black and white."
-  },
-  {
     "id": "work-041",
     "filename": "museum-stairs-luminous-artwork.webp",
     "width": 2100,
@@ -531,19 +518,6 @@ window.PORTFOLIO_PHOTOS = [
       "travel"
     ],
     "alt": "A man smoking on an ornate city balcony."
-  },
-  {
-    "id": "work-043",
-    "filename": "woman-sunglasses-city-crowd.webp",
-    "width": 2356,
-    "height": 3200,
-    "captureMonth": "July",
-    "captureYear": 2024,
-    "sensitivity": "none",
-    "tags": [
-      "portrait"
-    ],
-    "alt": "A stylish woman in sunglasses seen through a city crowd."
   },
   {
     "id": "work-044",
@@ -819,19 +793,6 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A woman in red posing against a cloud-painted blue wall."
   },
   {
-    "id": "work-067",
-    "filename": "red-dress-blue-doorway.webp",
-    "width": 2134,
-    "height": 3200,
-    "captureMonth": "May",
-    "captureYear": 2024,
-    "sensitivity": "none",
-    "tags": [
-      "portrait"
-    ],
-    "alt": "A woman in a red dress framed by a blue cloud-painted doorway."
-  },
-  {
     "id": "work-068",
     "filename": "ring-tailed-lemur-golden-light.webp",
     "width": 3200,
@@ -1012,5 +973,44 @@ window.PORTFOLIO_PHOTOS = [
       "travel"
     ],
     "alt": "A weathered stone bell tower framed by dark palm leaves."
+  },
+  {
+    "id": "work-011",
+    "filename": "weathered-apple-winter-branches.webp",
+    "width": 2665,
+    "height": 1785,
+    "captureMonth": "August",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "landscape"
+    ],
+    "alt": "A weathered red apple hanging from bare winter branches."
+  },
+  {
+    "id": "work-010",
+    "filename": "suspended-water-droplets.webp",
+    "width": 1149,
+    "height": 1593,
+    "captureMonth": "August",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "landscape"
+    ],
+    "alt": "Fine water droplets suspended like beads against a dark green background."
+  },
+  {
+    "id": "work-025",
+    "filename": "mountain-peak-sunlit-clouds.webp",
+    "width": 2133,
+    "height": 3200,
+    "captureMonth": "December",
+    "captureYear": 2025,
+    "sensitivity": "none",
+    "tags": [
+      "landscape"
+    ],
+    "alt": "A mountain peak rising beneath dramatic sunlit clouds."
   }
 ];
