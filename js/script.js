@@ -94,6 +94,70 @@
     });
   }
 
+  function setupGalleryCursor() {
+    const precisePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (!gallery || !precisePointer.matches || !("PointerEvent" in window)) return;
+
+    const cursor = document.createElement("span");
+    const fill = document.createElement("span");
+    cursor.className = "gallery-cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    fill.className = "gallery-cursor-fill";
+    cursor.append(fill);
+    document.body.append(cursor);
+    document.documentElement.classList.add("has-gallery-cursor");
+
+    let frame = null;
+    let x = -60;
+    let y = -60;
+    let visible = false;
+    let overImage = false;
+    let pointerTarget = null;
+
+    const renderPosition = () => {
+      cursor.style.transform = `translate3d(${x - 15}px, ${y - 15}px, 0)`;
+      frame = null;
+    };
+
+    const moveCursor = (event) => {
+      x = event.clientX;
+      y = event.clientY;
+      if (frame === null) frame = window.requestAnimationFrame(renderPosition);
+    };
+
+    const setImageState = (target) => {
+      const nextState = target instanceof Element && Boolean(target.closest(".photo-card"));
+      if (nextState === overImage) return;
+      overImage = nextState;
+      cursor.classList.toggle("is-over-image", overImage);
+    };
+
+    const trackCursor = (event) => {
+      moveCursor(event);
+      if (event.target !== pointerTarget) {
+        pointerTarget = event.target;
+        setImageState(pointerTarget);
+      }
+      if (visible) return;
+      visible = true;
+      cursor.classList.add("is-visible");
+    };
+
+    const hideCursor = () => {
+      if (!visible && !overImage) return;
+      visible = false;
+      overImage = false;
+      pointerTarget = null;
+      cursor.classList.remove("is-visible", "is-over-image");
+    };
+
+    gallery.addEventListener("pointerenter", trackCursor);
+    gallery.addEventListener("pointermove", trackCursor, { passive: true });
+    gallery.addEventListener("pointerleave", hideCursor);
+    gallery.addEventListener("click", hideCursor);
+    window.addEventListener("blur", hideCursor);
+  }
+
   function applySiteContent() {
     const name = site.name || "Lightworks";
     const copyrightName = site.copyrightName || name;
@@ -622,6 +686,7 @@
 
   applySiteContent();
   createGallery();
+  setupGalleryCursor();
 
   if ("ResizeObserver" in window && gallery) {
     new ResizeObserver(requestLayout).observe(gallery);
