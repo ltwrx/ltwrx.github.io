@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0c0c0c">
+    <meta name="color-scheme" content="dark">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="description" content="Lightworks Studio ∙ Photographer working across portraits, figure studies, landscapes and quiet observations.">
+    <meta property="og:title" content="Lightworks ∙ Portfolio">
+    <meta property="og:description" content="Lightworks Studio ∙ Photographer working across portraits, figure studies, landscapes and quiet observations.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Lightworks ∙ Portfolio">
+    <meta property="og:url" content="https://ltwrx.github.io/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Lightworks ∙ Portfolio">
+    <meta name="twitter:description" content="Lightworks Studio ∙ Photographer working across portraits, figure studies, landscapes and quiet observations.">
+    <title>Lightworks ∙ Portfolio</title>
+    <link rel="canonical" href="https://ltwrx.github.io/">
+    <link rel="icon" href="./icons/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="preload" as="image" href="./images/thumbnails/hiker-stormy-mountain-ridge.webp" fetchpriority="high">
+    <script defer src="./js/site-config.js"></script>
+    <script defer src="./js/photos.js"></script>
+    <script defer src="./js/script.js"></script>
+  </head>
+  <body>
+    <main>
+      <header class="introduction" id="top" aria-labelledby="portfolio-title">
+        <div class="introduction-nav">
+          <p class="eyebrow" data-site-eyebrow>Photography · Selected works</p>
+          <a class="contact-link" href="#contact">
+            Contact
+            <span class="ui-icon ui-icon-contact" aria-hidden="true"></span>
+          </a>
+        </div>
+        <div class="introduction-copy">
+          <h1 id="portfolio-title">Photography,<br>without distraction.</h1>
+          <div>
+            <p data-site-description>Lightworks Studio ∙ Photographer working across portraits, figure studies, landscapes and quiet observations.</p>
+            <div class="location-row">
+              <p class="location" data-site-location>Based in <strong>Poland</strong></p>
+              <a class="contact-link mobile-contact-link" href="#contact">
+                Contact
+                <span class="ui-icon ui-icon-contact" aria-hidden="true"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="gallery-section" aria-labelledby="gallery-title">
+        <div class="gallery-heading">
+          <h2 id="gallery-title">Selected works</h2>
+          <p><span id="photo-count">78</span> photographs · <span id="photo-years">2018–2026</span></p>
+        </div>
+        <noscript>
+          <p class="javascript-notice">JavaScript is required to display the interactive gallery.</p>
+        </noscript>
+        <div class="masonry" id="gallery" aria-busy="true"></div>
+      </section>
+
+      <footer class="site-footer" id="contact">
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2>Have a project in mind?</h2>
+        </div>
+        <div class="contact-details">
+          <a class="email-link" data-site-email href="mailto:lightworks.studio@outlook.com">lightworks.studio@outlook.com</a>
+          <p data-site-inquiries><span class="inquiry-group">Portraits · Artistic projects</span><span class="inquiry-group">Collaborations · Exhibitions</span></p>
+          <a class="back-to-top" href="#top">
+            Back to top
+            <span class="ui-icon ui-icon-back-to-top" aria-hidden="true"></span>
+          </a>
+        </div>
+        <p class="copyright">© <span data-current-year>2026</span> <span data-site-name>Lightworks</span></p>
+      </footer>
+    </main>
+
+    <div class="modal-backdrop consent-backdrop" id="consent-overlay" role="presentation" hidden>
+      <div class="consent-dialog" id="consent-dialog" role="dialog" aria-modal="true" aria-labelledby="consent-title" aria-describedby="consent-description">
+        <p class="eyebrow">Before you continue</p>
+        <h2 id="consent-title">Sensitive artistic content</h2>
+        <p id="consent-description">Some images contain artistic nudity.<br>Choose whether to reveal them.</p>
+        <div class="consent-actions">
+          <button type="button" class="primary-action" id="accept-sensitive">Show images</button>
+          <button type="button" class="secondary-action" id="dismiss-sensitive">Keep hidden</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop lightbox" id="lightbox-overlay" role="presentation" hidden>
+      <div class="lightbox-dialog" id="lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+        <h2 class="sr-only" id="lightbox-title">Photograph</h2>
+        <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close lightbox">
+          <span class="ui-icon ui-icon-close" aria-hidden="true"></span>
+        </button>
+        <button class="lightbox-nav previous" id="lightbox-previous" type="button" aria-label="Previous photograph">
+          <span class="ui-icon ui-icon-previous" aria-hidden="true"></span>
+        </button>
+        <figure class="lightbox-figure">
+          <img id="lightbox-image" alt="" draggable="false">
+          <span class="lightbox-image-fallback" id="lightbox-image-fallback" hidden>
+            <span class="ui-icon ui-icon-image-unavailable" aria-hidden="true"></span>
+            <span>Image unavailable</span>
+          </span>
+          <figcaption class="lightbox-caption">
+            <div>
+              <strong id="lightbox-photo-title" hidden></strong>
+              <span id="lightbox-date" hidden></span>
+              <span id="lightbox-tags" hidden></span>
+            </div>
+            <span class="lightbox-count" id="lightbox-count"></span>
+            <span id="lightbox-credit" hidden></span>
+            <button class="copy-link" id="copy-link" type="button" aria-label="Copy a direct link to this photograph">
+              <span class="ui-icon ui-icon-copy-link" aria-hidden="true"></span>
+              <span id="copy-link-status" aria-live="polite">Copy link</span>
+            </button>
+            <span class="lightbox-credit">© <span data-site-name>Lightworks</span></span>
+          </figcaption>
+        </figure>
+        <button class="lightbox-nav next" id="lightbox-next" type="button" aria-label="Next photograph">
+          <span class="ui-icon ui-icon-next" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
