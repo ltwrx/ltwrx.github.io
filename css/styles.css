@@ -113,6 +113,10 @@ a:focus-visible {
   background-image: url("../icons/contact.svg");
 }
 
+.ui-icon-sensitive-visible {
+  background-image: url("../icons/sensitive-visible.svg");
+}
+
 .ui-icon-sensitive-hidden {
   background-image: url("../icons/sensitive-hidden.svg");
 }

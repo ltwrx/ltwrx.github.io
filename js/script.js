@@ -96,11 +96,13 @@
 
   function applySiteContent() {
     const name = site.name || "Lightworks";
-    const description = site.description || "Lightworks Studio ∙ Photographer working across portraits, figure studies, landscapes and quiet observations.";
+    const copyrightName = site.copyrightName || name;
+    const description = site.description || "Lightworks Studio ∙ Photographer working across portraits, figure studies, travel, landscapes and quiet observations.";
     const email = site.email || "lightworks.studio@outlook.com";
     const location = site.location || "Poland";
 
     setText("[data-site-name]", name);
+    setText("[data-site-copyright-name]", copyrightName);
     setText("[data-site-eyebrow]", site.eyebrow || "Photography · Selected works");
     setText("[data-site-description]", description);
     document.querySelectorAll("[data-site-location]").forEach((element) => {
