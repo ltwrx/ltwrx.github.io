@@ -962,30 +962,17 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "The shadow of a nude figure projected onto a translucent curtain."
   },
   {
-    "id": "work-082",
-    "filename": "stone-bell-tower-palm-leaves.webp",
-    "width": 2618,
-    "height": 2617,
+    "id": "work-025",
+    "filename": "mountain-peak-sunlit-clouds.webp",
+    "width": 2133,
+    "height": 3200,
     "captureMonth": "December",
-    "captureYear": 2018,
-    "sensitivity": "none",
-    "tags": [
-      "travel"
-    ],
-    "alt": "A weathered stone bell tower framed by dark palm leaves."
-  },
-  {
-    "id": "work-011",
-    "filename": "weathered-apple-winter-branches.webp",
-    "width": 2665,
-    "height": 1785,
-    "captureMonth": "August",
-    "captureYear": 2026,
+    "captureYear": 2025,
     "sensitivity": "none",
     "tags": [
       "landscape"
     ],
-    "alt": "A weathered red apple hanging from bare winter branches."
+    "alt": "A mountain peak rising beneath dramatic sunlit clouds."
   },
   {
     "id": "work-010",
@@ -1001,16 +988,29 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "Fine water droplets suspended like beads against a dark green background."
   },
   {
-    "id": "work-025",
-    "filename": "mountain-peak-sunlit-clouds.webp",
-    "width": 2133,
-    "height": 3200,
-    "captureMonth": "December",
-    "captureYear": 2025,
+    "id": "work-011",
+    "filename": "weathered-apple-winter-branches.webp",
+    "width": 2665,
+    "height": 1785,
+    "captureMonth": "August",
+    "captureYear": 2026,
     "sensitivity": "none",
     "tags": [
       "landscape"
     ],
-    "alt": "A mountain peak rising beneath dramatic sunlit clouds."
+    "alt": "A weathered red apple hanging from bare winter branches."
+  },
+  {
+    "id": "work-082",
+    "filename": "stone-bell-tower-palm-leaves.webp",
+    "width": 2618,
+    "height": 2617,
+    "captureMonth": "December",
+    "captureYear": 2018,
+    "sensitivity": "none",
+    "tags": [
+      "travel"
+    ],
+    "alt": "A weathered stone bell tower framed by dark palm leaves."
   }
 ];
