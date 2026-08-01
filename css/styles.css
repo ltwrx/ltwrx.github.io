@@ -7,6 +7,7 @@
   --line: rgba(238, 234, 227, 0.16);
   --accent: #d4c5af;
   --focus: #f2c982;
+  --sensitive-blur: 9px;
   --page-pad: clamp(16px, 3vw, 56px);
   --max-width: 2460px;
 }
@@ -328,12 +329,12 @@ a:focus-visible {
 }
 
 .photo-card.is-gated img {
-  filter: blur(12px) saturate(0.72) brightness(0.64);
+  filter: blur(var(--sensitive-blur)) saturate(0.72) brightness(0.64);
   transform: scale(1.12);
 }
 
 .photo-card.is-gated:hover img {
-  filter: blur(10px) saturate(0.72) brightness(0.7);
+  filter: blur(var(--sensitive-blur)) saturate(0.72) brightness(0.7);
   transform: scale(1.12);
 }
 
