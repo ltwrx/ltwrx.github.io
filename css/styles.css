@@ -8,6 +8,7 @@
   --accent: #d4c5af;
   --focus: #f2c982;
   --sensitive-blur: 9px;
+  --gallery-gap: 12px;
   --page-pad: clamp(16px, 3vw, 56px);
   --max-width: 2460px;
 }
@@ -284,7 +285,7 @@ a:focus-visible {
   border: 0;
   border-radius: 0;
   background: var(--ink-soft);
-  cursor: zoom-in;
+  cursor: default;
   text-align: left;
   touch-action: manipulation;
   transform-origin: top left;
@@ -331,6 +332,12 @@ a:focus-visible {
 .photo-card.is-gated img {
   filter: blur(var(--sensitive-blur)) saturate(0.72) brightness(0.64);
   transform: scale(1.12);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .photo-card {
+    cursor: url("../icons/gallery-cursor.svg") 16 16, default;
+  }
 }
 
 .photo-card.is-gated:hover img {
@@ -829,6 +836,11 @@ a:focus-visible {
 
 @media (max-width: 760px) {
 
+  :root {
+    --sensitive-blur: clamp(4px, 1.1vw, 9px);
+    --gallery-gap: 8px;
+  }
+
 
   .introduction {
     padding-top: 24px;
@@ -855,6 +867,10 @@ a:focus-visible {
 
   .gallery-heading p {
     text-align: right;
+  }
+
+  .gallery-section {
+    padding-inline: var(--gallery-gap);
   }
 
   .site-footer {

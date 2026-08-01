@@ -279,7 +279,9 @@
     const width = gallery.getBoundingClientRect().width;
     if (width <= 0) return;
 
-    const gap = width < 560 ? 8 : 12;
+    const gap = Number.parseFloat(
+      window.getComputedStyle(gallery).getPropertyValue("--gallery-gap"),
+    ) || 12;
     const columns = Math.min(columnCountForWidth(width), photos.length);
     const columnWidth = Math.floor((width - gap * (columns - 1)) / columns);
     const heights = Array.from({ length: columns }, () => 0);
