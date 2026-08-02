@@ -12,6 +12,7 @@
   const dismissSensitiveButton = document.querySelector("#dismiss-sensitive");
   const lightboxOverlay = document.querySelector("#lightbox-overlay");
   const lightboxDialog = document.querySelector("#lightbox-dialog");
+  const lightboxFigure = document.querySelector(".lightbox-figure");
   const lightboxImage = document.querySelector("#lightbox-image");
   const lightboxImageFallback = document.querySelector("#lightbox-image-fallback");
   const lightboxTitle = document.querySelector("#lightbox-title");
@@ -25,6 +26,11 @@
   const nextButton = document.querySelector("#lightbox-next");
   const copyButton = document.querySelector("#copy-link");
   const copyStatus = document.querySelector("#copy-link-status");
+  const scrollCue = document.querySelector("#lightbox-scroll-cue");
+  const mobileLightbox = window.matchMedia(
+    "(max-width: 760px), (max-height: 500px) and (hover: none) and (pointer: coarse)",
+  );
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const cards = new Map();
   let activeIndex = null;
@@ -36,6 +42,8 @@
   let touchStart = null;
   let copyResetTimer = null;
   let layoutFrame = null;
+  let scrollCueTimer = null;
+  let transitionRunning = false;
 
   function readConsent() {
     try {
@@ -503,6 +511,29 @@
     copyStatus.textContent = "Copy link";
   }
 
+  function clearScrollCue() {
+    if (scrollCueTimer !== null) {
+      window.clearTimeout(scrollCueTimer);
+      scrollCueTimer = null;
+    }
+    lightboxOverlay.classList.remove("show-scroll-cue");
+  }
+
+  function showScrollCue() {
+    clearScrollCue();
+    if (!mobileLightbox.matches || reducedMotion.matches || !scrollCue) return;
+    scrollCue.hidden = false;
+    window.requestAnimationFrame(() => {
+      lightboxOverlay.classList.add("show-scroll-cue");
+    });
+    scrollCueTimer = window.setTimeout(clearScrollCue, 3600);
+  }
+
+  function subtleHaptic() {
+    if (!mobileLightbox.matches || reducedMotion.matches || !("vibrate" in navigator)) return;
+    navigator.vibrate(5);
+  }
+
   function openPhoto(index, pushHistory) {
     const photo = photos[index];
     if (!photo) return;
@@ -528,14 +559,20 @@
 
     lightboxOverlay.hidden = false;
     lockBody();
+    showScrollCue();
     window.setTimeout(() => closeButton.focus({ preventScroll: true }), 0);
   }
 
   function hideLightbox(restore = true) {
+    clearScrollCue();
     lightboxOverlay.hidden = true;
     activeIndex = null;
     openedWithPush = false;
     lightboxImage.removeAttribute("src");
+    lightboxFigure.getAnimations().forEach((animation) => animation.cancel());
+    lightboxFigure.style.removeProperty("transform");
+    lightboxFigure.style.removeProperty("opacity");
+    transitionRunning = false;
     unlockBody();
     if (restore) restoreFocus();
   }
@@ -549,23 +586,84 @@
     }
   }
 
-  function navigate(direction) {
-    if (activeIndex === null || photos.length < 2) return;
+  function findNavigableIndex(direction) {
+    if (activeIndex === null) return null;
     for (let step = 1; step <= photos.length; step += 1) {
       const candidate = (activeIndex + direction * step + photos.length) % photos.length;
-      if (!isGated(photos[candidate])) {
-        activeIndex = candidate;
-        const photo = photos[candidate];
-        const url = new URL(window.location.href);
-        url.searchParams.set("photo", photo.id);
-        window.history.replaceState(
-          openedWithPush ? { portfolioPhoto: true } : null,
-          "",
-          `${url.pathname}${url.search}${url.hash}`,
-        );
-        renderLightbox(photo, candidate);
-        return;
-      }
+      if (!isGated(photos[candidate])) return candidate;
+    }
+    return null;
+  }
+
+  function commitNavigation(candidate) {
+    activeIndex = candidate;
+    const photo = photos[candidate];
+    const url = new URL(window.location.href);
+    url.searchParams.set("photo", photo.id);
+    window.history.replaceState(
+      openedWithPush ? { portfolioPhoto: true } : null,
+      "",
+      `${url.pathname}${url.search}${url.hash}`,
+    );
+    renderLightbox(photo, candidate);
+  }
+
+  async function animateNavigation(candidate, direction, dragOffset = 0) {
+    if (reducedMotion.matches || !("animate" in lightboxFigure)) {
+      commitNavigation(candidate);
+      lightboxFigure.style.removeProperty("transform");
+      lightboxFigure.style.removeProperty("opacity");
+      return;
+    }
+
+    const mobile = mobileLightbox.matches;
+    const start = mobile
+      ? `translate3d(0, ${dragOffset}px, 0)`
+      : "translate3d(0, 0, 0)";
+    const outgoing = mobile
+      ? `translate3d(0, ${direction > 0 ? "-18vh" : "18vh"}, 0)`
+      : `translate3d(${direction > 0 ? "-12vw" : "12vw"}, 0, 0)`;
+    const incoming = mobile
+      ? `translate3d(0, ${direction > 0 ? "18vh" : "-18vh"}, 0)`
+      : `translate3d(${direction > 0 ? "12vw" : "-12vw"}, 0, 0)`;
+
+    lightboxFigure.style.removeProperty("transform");
+    lightboxFigure.style.removeProperty("opacity");
+    const exitAnimation = lightboxFigure.animate(
+      [
+        { transform: start, opacity: 1 },
+        { transform: outgoing, opacity: 0 },
+      ],
+      { duration: mobile ? 210 : 240, easing: "cubic-bezier(0.55, 0, 1, 0.45)", fill: "forwards" },
+    );
+    await exitAnimation.finished;
+    commitNavigation(candidate);
+    subtleHaptic();
+    exitAnimation.cancel();
+    const enterAnimation = lightboxFigure.animate(
+      [
+        { transform: incoming, opacity: 0 },
+        { transform: "translate3d(0, 0, 0)", opacity: 1 },
+      ],
+      { duration: mobile ? 430 : 460, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+    );
+    await enterAnimation.finished;
+  }
+
+  async function navigate(direction, dragOffset = 0) {
+    if (activeIndex === null || photos.length < 2 || transitionRunning) return;
+    const candidate = findNavigableIndex(direction);
+    if (candidate === null) return;
+    transitionRunning = true;
+    clearScrollCue();
+    try {
+      await animateNavigation(candidate, direction, dragOffset);
+    } catch {
+      if (!lightboxOverlay.hidden && activeIndex !== candidate) commitNavigation(candidate);
+    } finally {
+      lightboxFigure.style.removeProperty("transform");
+      lightboxFigure.style.removeProperty("opacity");
+      transitionRunning = false;
     }
   }
 
@@ -597,7 +695,7 @@
   function focusableElements(dialog) {
     return Array.from(
       dialog.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'),
-    ).filter((element) => !element.hidden);
+    ).filter((element) => !element.hidden && element.getClientRects().length > 0);
   }
 
   function handleKeyboard(event) {
@@ -613,12 +711,22 @@
       consentOverlay.hidden ? closeLightbox() : dismissConsent();
       return;
     }
-    if (consentOverlay.hidden && event.key === "ArrowLeft") {
+    if (consentOverlay.hidden && !mobileLightbox.matches && event.key === "ArrowLeft") {
       event.preventDefault();
       navigate(-1);
       return;
     }
-    if (consentOverlay.hidden && event.key === "ArrowRight") {
+    if (consentOverlay.hidden && !mobileLightbox.matches && event.key === "ArrowRight") {
+      event.preventDefault();
+      navigate(1);
+      return;
+    }
+    if (consentOverlay.hidden && mobileLightbox.matches && event.key === "ArrowUp") {
+      event.preventDefault();
+      navigate(-1);
+      return;
+    }
+    if (consentOverlay.hidden && mobileLightbox.matches && event.key === "ArrowDown") {
       event.preventDefault();
       navigate(1);
       return;
@@ -667,9 +775,25 @@
   }
 
   function handleTouchStart(event) {
-    if (lightboxOverlay.hidden) return;
+    if (lightboxOverlay.hidden || !mobileLightbox.matches || transitionRunning) return;
+    if (event.target instanceof Element && event.target.closest("button, a")) return;
     const touch = event.changedTouches[0];
-    touchStart = { x: touch.clientX, y: touch.clientY };
+    touchStart = { x: touch.clientX, y: touch.clientY, offset: 0 };
+    clearScrollCue();
+    lightboxFigure.getAnimations().forEach((animation) => animation.cancel());
+  }
+
+  function handleTouchMove(event) {
+    if (!touchStart || lightboxOverlay.hidden || transitionRunning) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - touchStart.x;
+    const dy = touch.clientY - touchStart.y;
+    if (Math.abs(dx) > Math.abs(dy) * 1.15) return;
+    event.preventDefault();
+    const offset = Math.max(-96, Math.min(96, dy * 0.72));
+    touchStart.offset = offset;
+    lightboxFigure.style.transform = `translate3d(0, ${offset}px, 0)`;
+    lightboxFigure.style.opacity = String(1 - Math.min(Math.abs(offset) / 420, 0.18));
   }
 
   function handleTouchEnd(event) {
@@ -677,10 +801,28 @@
     const touch = event.changedTouches[0];
     const dx = touch.clientX - touchStart.x;
     const dy = touch.clientY - touchStart.y;
+    const offset = touchStart.offset;
     touchStart = null;
-    if (Math.abs(dx) > 54 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-      navigate(dx > 0 ? -1 : 1);
+    if (Math.abs(dy) > 52 && Math.abs(dy) > Math.abs(dx) * 1.1) {
+      navigate(dy < 0 ? 1 : -1, offset);
+      return;
     }
+    lightboxFigure.animate(
+      [
+        { transform: `translate3d(0, ${offset}px, 0)`, opacity: lightboxFigure.style.opacity || 1 },
+        { transform: "translate3d(0, 0, 0)", opacity: 1 },
+      ],
+      { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+    );
+    lightboxFigure.style.removeProperty("transform");
+    lightboxFigure.style.removeProperty("opacity");
+  }
+
+  function handleTouchCancel() {
+    if (!touchStart) return;
+    touchStart = null;
+    lightboxFigure.style.removeProperty("transform");
+    lightboxFigure.style.removeProperty("opacity");
   }
 
   applySiteContent();
@@ -715,7 +857,9 @@
     if (event.target === lightboxOverlay) closeLightbox();
   });
   lightboxOverlay.addEventListener("touchstart", handleTouchStart, { passive: true });
+  lightboxOverlay.addEventListener("touchmove", handleTouchMove, { passive: false });
   lightboxOverlay.addEventListener("touchend", handleTouchEnd, { passive: true });
+  lightboxOverlay.addEventListener("touchcancel", handleTouchCancel, { passive: true });
   document.addEventListener("keydown", handleKeyboard);
   window.addEventListener("popstate", readUrl);
   readUrl();

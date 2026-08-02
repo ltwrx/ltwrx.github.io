@@ -695,6 +695,7 @@ a:focus-visible {
   grid-template-rows: minmax(0, 1fr) auto;
   place-items: center;
   gap: 15px;
+  will-change: transform, opacity;
 }
 
 .lightbox-figure > img {
@@ -846,6 +847,10 @@ a:focus-visible {
   right: 2px;
 }
 
+.lightbox-scroll-cue {
+  display: none;
+}
+
 .error-page {
   display: grid;
   min-height: 100vh;
@@ -886,7 +891,18 @@ a:focus-visible {
   50% { background-position: 0 0; }
 }
 
-@media (max-width: 760px) {
+@keyframes mobile-picture-nudge {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  38% { transform: translate3d(0, -7px, 0); }
+  62% { transform: translate3d(0, 2px, 0); }
+}
+
+@keyframes mobile-scroll-cue {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.48; }
+  50% { transform: translate3d(0, 5px, 0); opacity: 1; }
+}
+
+@media (max-width: 760px), (max-height: 500px) and (hover: none) and (pointer: coarse) {
 
   :root {
     --sensitive-blur: clamp(4px, 1.1vw, 9px);
@@ -951,11 +967,13 @@ a:focus-visible {
     grid-template-columns: 1fr;
     align-items: stretch;
     padding: 42px 0 52px;
+    overflow: hidden;
   }
 
   .lightbox-figure {
     grid-column: 1;
     gap: 12px;
+    padding-top: 0;
   }
 
   .lightbox-figure > img {
@@ -978,17 +996,57 @@ a:focus-visible {
   }
 
   .lightbox-nav {
-    top: auto;
-    bottom: -2px;
-    transform: none;
+    display: none;
   }
 
-  .lightbox-nav.previous {
-    left: 0;
+  .lightbox-scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: max(4px, env(safe-area-inset-bottom));
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: rgba(244, 240, 233, 0.7);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(-50%, 6px, 0);
+    transition: opacity 260ms ease, transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .lightbox-nav.next {
-    right: 0;
+  .lightbox.show-scroll-cue .lightbox-scroll-cue {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  .lightbox.show-scroll-cue .lightbox-figure {
+    animation: mobile-picture-nudge 760ms cubic-bezier(0.22, 1, 0.36, 1) 540ms 2;
+  }
+
+  .lightbox-scroll-cue-label {
+    font-size: 0.52rem;
+    font-weight: 550;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .lightbox-scroll-cue-arrows {
+    display: grid;
+    animation: mobile-scroll-cue 920ms ease-in-out infinite;
+  }
+
+  .lightbox-scroll-cue-arrows .ui-icon {
+    grid-column: 1;
+    width: 0.72rem;
+    height: 0.72rem;
+    transform: rotate(90deg);
+    filter: brightness(0) saturate(100%) invert(100%);
+  }
+
+  .lightbox-scroll-cue-arrows .ui-icon + .ui-icon {
+    margin-top: -4px;
+    opacity: 0.48;
   }
 
   .consent-actions {
