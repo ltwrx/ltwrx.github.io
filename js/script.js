@@ -33,6 +33,8 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const cards = new Map();
+  const pendingFullImagePreloads = new Map();
+  const readyFullImageSources = new Set();
   let activeIndex = null;
   let pendingSensitiveId = null;
   let openedWithPush = false;
@@ -534,6 +536,62 @@
     navigator.vibrate(5);
   }
 
+  function preloadFullPhoto(photo) {
+    if (!photo) return Promise.resolve(false);
+    const source = photoPath(photo.filename);
+    if (readyFullImageSources.has(source)) return Promise.resolve(true);
+    if (pendingFullImagePreloads.has(source)) return pendingFullImagePreloads.get(source);
+
+    const preload = new Image();
+    preload.decoding = "async";
+    const ready = new Promise((resolve) => {
+      preload.addEventListener("load", async () => {
+        try {
+          if (typeof preload.decode === "function") await preload.decode();
+        } catch {
+          // A successful load is still safe to display when explicit decoding is unavailable.
+        }
+        readyFullImageSources.add(source);
+        resolve(true);
+      }, { once: true });
+      preload.addEventListener("error", () => resolve(false), { once: true });
+      preload.src = source;
+    });
+
+    pendingFullImagePreloads.set(source, ready);
+    ready.finally(() => pendingFullImagePreloads.delete(source));
+    return ready;
+  }
+
+  function preloadNeighboringPhotos(index) {
+    if (index === null || photos.length < 2) return;
+    [-1, 1].forEach((direction) => {
+      for (let step = 1; step <= photos.length; step += 1) {
+        const candidate = (index + direction * step + photos.length) % photos.length;
+        if (!isGated(photos[candidate])) {
+          void preloadFullPhoto(photos[candidate]);
+          break;
+        }
+      }
+    });
+  }
+
+  async function waitForDisplayedPhoto() {
+    if (!lightboxImage.complete) {
+      await new Promise((resolve) => {
+        lightboxImage.addEventListener("load", resolve, { once: true });
+        lightboxImage.addEventListener("error", resolve, { once: true });
+      });
+    }
+    if (!lightboxImage.hidden && typeof lightboxImage.decode === "function") {
+      try {
+        await lightboxImage.decode();
+      } catch {
+        // The load and error handlers own the visible fallback state.
+      }
+    }
+  }
+
   function openPhoto(index, pushHistory) {
     const photo = photos[index];
     if (!photo) return;
@@ -609,8 +667,11 @@
   }
 
   async function animateNavigation(candidate, direction, dragOffset = 0) {
+    const targetReady = preloadFullPhoto(photos[candidate]);
     if (reducedMotion.matches || !("animate" in lightboxFigure)) {
+      await targetReady;
       commitNavigation(candidate);
+      await waitForDisplayedPhoto();
       lightboxFigure.style.removeProperty("transform");
       lightboxFigure.style.removeProperty("opacity");
       return;
@@ -636,18 +697,24 @@
       ],
       { duration: mobile ? 210 : 240, easing: "cubic-bezier(0.55, 0, 1, 0.45)", fill: "forwards" },
     );
-    await exitAnimation.finished;
+    await Promise.all([exitAnimation.finished, targetReady]);
     commitNavigation(candidate);
+    await waitForDisplayedPhoto();
     subtleHaptic();
-    exitAnimation.cancel();
+    lightboxFigure.style.transform = incoming;
+    lightboxFigure.style.opacity = "0";
     const enterAnimation = lightboxFigure.animate(
       [
         { transform: incoming, opacity: 0 },
         { transform: "translate3d(0, 0, 0)", opacity: 1 },
       ],
-      { duration: mobile ? 430 : 460, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+      { duration: mobile ? 430 : 460, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "both" },
     );
+    exitAnimation.cancel();
     await enterAnimation.finished;
+    lightboxFigure.style.transform = "translate3d(0, 0, 0)";
+    lightboxFigure.style.opacity = "1";
+    enterAnimation.cancel();
   }
 
   async function navigate(direction, dragOffset = 0) {
@@ -845,6 +912,8 @@
   lightboxImage.addEventListener("load", () => {
     lightboxImage.hidden = false;
     lightboxImageFallback.hidden = true;
+    if (activeIndex !== null) readyFullImageSources.add(photoPath(photos[activeIndex].filename));
+    preloadNeighboringPhotos(activeIndex);
   });
   lightboxImage.addEventListener("error", () => {
     lightboxImage.hidden = true;
