@@ -4,7 +4,7 @@ A framework-free static portfolio hosted directly from the root of the
 `ltwrx.github.io` repository. It uses only HTML, CSS, browser JavaScript and
 local assets; no Node.js installation or build command is required.
 
-## Preview locally
+## Local Preview
 
 1. Open this repository in Visual Studio Code.
 2. Install Microsoft's **Live Preview** extension if needed.
