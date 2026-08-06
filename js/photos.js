@@ -299,6 +299,45 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "An intimate close portrait of two nude figures in a winter forest."
   },
   {
+    "id": "work-083",
+    "filename": "saxophonist-red-stage-light.webp",
+    "width": 814,
+    "height": 1122,
+    "captureMonth": "June",
+    "captureYear": 2022,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A saxophonist bathed in red light during a live performance."
+  },
+  {
+    "id": "work-084",
+    "filename": "rapper-silhouette-stage-lights.webp",
+    "width": 3200,
+    "height": 1919,
+    "captureMonth": "May",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A performer's silhouette singing into a microphone before bright stage lights."
+  },
+  {
+    "id": "work-085",
+    "filename": "rapper-pink-petals-concert.webp",
+    "width": 3200,
+    "height": 2459,
+    "captureMonth": "May",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A performer pointing into the crowd amid falling pink petals on stage."
+  },
+  {
     "id": "work-022",
     "filename": "white-swan-dark-water.webp",
     "width": 2558,
@@ -507,6 +546,19 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A man smoking on an ornate city balcony."
   },
   {
+    "id": "work-086",
+    "filename": "woman-cliff-edge-ocean-beach.webp",
+    "width": 3036,
+    "height": 2025,
+    "captureMonth": "October",
+    "captureYear": 2021,
+    "sensitivity": "none",
+    "tags": [
+      "landscape"
+    ],
+    "alt": "A woman sitting at a cliff edge overlooking a wave-washed beach."
+  },
+  {
     "id": "work-044",
     "filename": "mint-scooter-columned-passage.webp",
     "width": 2133,
@@ -557,6 +609,19 @@ window.PORTFOLIO_PHOTOS = [
       "travel"
     ],
     "alt": "An Italian flag above a stone tower crossed by overhead wires."
+  },
+  {
+    "id": "work-087",
+    "filename": "timber-pavilion-dusk-lights.webp",
+    "width": 3200,
+    "height": 2133,
+    "captureMonth": "September",
+    "captureYear": 2023,
+    "sensitivity": "none",
+    "tags": [
+      "travel"
+    ],
+    "alt": "A timber-clad pavilion glowing with light at dusk."
   },
   {
     "id": "work-048",
@@ -819,6 +884,19 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A procession of red tractors carrying Polish flags."
   },
   {
+    "id": "work-088",
+    "filename": "fisherman-cliff-edge-sea.webp",
+    "width": 3200,
+    "height": 2084,
+    "captureMonth": "October",
+    "captureYear": 2021,
+    "sensitivity": "none",
+    "tags": [
+      "landscape"
+    ],
+    "alt": "A fisherman casting a line from a rocky cliff above the sea."
+  },
+  {
     "id": "work-071",
     "filename": "eclipsed-sun-dark-clouds.webp",
     "width": 1491,
@@ -895,6 +973,19 @@ window.PORTFOLIO_PHOTOS = [
       "travel"
     ],
     "alt": "A small mushroom connected to a fine strand above moss."
+  },
+  {
+    "id": "work-089",
+    "filename": "sunlit-leaves-bokeh-macro.webp",
+    "width": 2513,
+    "height": 2702,
+    "captureMonth": "September",
+    "captureYear": 2022,
+    "sensitivity": "none",
+    "tags": [
+      "landscape"
+    ],
+    "alt": "Sunlit green leaves framing a soft bokeh background."
   },
   {
     "id": "work-077",
@@ -999,6 +1090,19 @@ window.PORTFOLIO_PHOTOS = [
       "landscape"
     ],
     "alt": "A weathered red apple hanging from bare winter branches."
+  },
+  {
+    "id": "work-090",
+    "filename": "figure-red-lace-cornfield.webp",
+    "width": 2133,
+    "height": 3200,
+    "captureMonth": "July",
+    "captureYear": 2023,
+    "sensitivity": "none",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A figure in red lace glimpsed through tall cornfield leaves."
   },
   {
     "id": "work-082",
