@@ -46,6 +46,7 @@
   let layoutFrame = null;
   let scrollCueTimer = null;
   let transitionRunning = false;
+  let navigationQueue = [];
 
   function readConsent() {
     try {
@@ -623,6 +624,7 @@
 
   function hideLightbox(restore = true) {
     clearScrollCue();
+    navigationQueue.length = 0;
     lightboxOverlay.hidden = true;
     activeIndex = null;
     openedWithPush = false;
@@ -718,7 +720,15 @@
   }
 
   async function navigate(direction, dragOffset = 0) {
-    if (activeIndex === null || photos.length < 2 || transitionRunning) return;
+    if (activeIndex === null || photos.length < 2) return;
+    if (transitionRunning) {
+      navigationQueue.push({ direction, dragOffset });
+      return;
+    }
+    await runNavigation(direction, dragOffset);
+  }
+
+  async function runNavigation(direction, dragOffset) {
     const candidate = findNavigableIndex(direction);
     if (candidate === null) return;
     transitionRunning = true;
@@ -732,6 +742,13 @@
       lightboxFigure.style.removeProperty("opacity");
       transitionRunning = false;
     }
+
+    if (lightboxOverlay.hidden) {
+      navigationQueue.length = 0;
+      return;
+    }
+    const next = navigationQueue.shift();
+    if (next) await runNavigation(next.direction, next.dragOffset);
   }
 
   function readUrl() {
