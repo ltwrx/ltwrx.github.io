@@ -316,6 +316,7 @@ a:focus-visible {
   height: 100%;
   object-fit: cover;
   opacity: 0;
+  border-radius: var(--photo-radius);
   user-select: none;
   -webkit-user-drag: none;
   transition: filter 180ms ease, transform 180ms ease;
@@ -699,7 +700,17 @@ a:focus-visible {
   will-change: transform, opacity;
 }
 
-.lightbox-figure > img {
+.lightbox-photo {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: var(--photo-radius);
+}
+
+.lightbox-photo > img {
   grid-column: 1;
   grid-row: 1;
   display: block;
@@ -995,7 +1006,14 @@ a:focus-visible {
     padding-top: 0;
   }
 
-  .lightbox-figure > img {
+  .photo-card,
+  .photo-card img,
+  .lightbox-photo,
+  .lightbox-photo > img {
+    border-radius: var(--photo-radius);
+  }
+
+  .lightbox-photo > img {
     max-height: calc(100dvh - 156px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   }
 
