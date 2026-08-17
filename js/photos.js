@@ -91,17 +91,17 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A curved gallery corridor lit in cyan and rose."
   },
   {
-    "id": "work-005",
-    "filename": "fly-agaric-mushroom-snow.webp",
+    "id": "work-036",
+    "filename": "neon-parking-garage-portrait.webp",
     "width": 3200,
     "height": 2133,
     "captureMonth": "January",
-    "captureYear": 2024,
+    "captureYear": 2025,
     "sensitivity": "none",
     "tags": [
-      "landscape"
+      "portrait"
     ],
-    "alt": "A red fly agaric mushroom standing among traces of snow."
+    "alt": "A woman seated in a shopping cart in a neon-lit parking garage."
   },
   {
     "id": "work-006",
@@ -156,17 +156,17 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A woman in a red dress lying across geometric stone steps."
   },
   {
-    "id": "work-036",
-    "filename": "neon-parking-garage-portrait.webp",
+    "id": "work-005",
+    "filename": "fly-agaric-mushroom-snow.webp",
     "width": 3200,
     "height": 2133,
     "captureMonth": "January",
-    "captureYear": 2025,
+    "captureYear": 2024,
     "sensitivity": "none",
     "tags": [
-      "portrait"
+      "landscape"
     ],
-    "alt": "A woman seated in a shopping cart in a neon-lit parking garage."
+    "alt": "A red fly agaric mushroom standing among traces of snow."
   },
   {
     "id": "work-013",
@@ -780,32 +780,6 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A layered black-and-white portrait with windblown patterned fabric."
   },
   {
-    "id": "work-062",
-    "filename": "red-dress-city-stairway.webp",
-    "width": 2133,
-    "height": 3200,
-    "captureMonth": "May",
-    "captureYear": 2024,
-    "sensitivity": "none",
-    "tags": [
-      "portrait"
-    ],
-    "alt": "A woman in red posed between the railings of a city stairway."
-  },
-  {
-    "id": "work-063",
-    "filename": "woman-red-willow-branches.webp",
-    "width": 3200,
-    "height": 2133,
-    "captureMonth": "May",
-    "captureYear": 2024,
-    "sensitivity": "none",
-    "tags": [
-      "portrait"
-    ],
-    "alt": "A woman in red beneath bright green willow branches."
-  },
-  {
     "id": "work-064",
     "filename": "woman-red-sunlit-passage.webp",
     "width": 2133,
@@ -817,19 +791,6 @@ window.PORTFOLIO_PHOTOS = [
       "portrait"
     ],
     "alt": "A woman in red standing in a narrow sunlit passage."
-  },
-  {
-    "id": "work-065",
-    "filename": "red-dress-reflected-light.webp",
-    "width": 2134,
-    "height": 3200,
-    "captureMonth": "May",
-    "captureYear": 2024,
-    "sensitivity": "none",
-    "tags": [
-      "portrait"
-    ],
-    "alt": "A woman in a red dress seated in warm reflected light."
   },
   {
     "id": "work-067",
