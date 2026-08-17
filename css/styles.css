@@ -704,11 +704,18 @@ a:focus-visible {
   grid-column: 1;
   grid-row: 1;
   display: block;
+  justify-self: center;
+  align-self: center;
   min-width: 0;
+  min-height: 0;
+  width: auto;
+  height: auto;
   max-width: 100%;
   max-height: calc(100dvh - 116px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   object-fit: contain;
+  overflow: hidden;
   border-radius: var(--photo-radius);
+  clip-path: inset(0 round var(--photo-radius));
   user-select: none;
   -webkit-user-drag: none;
 }
@@ -999,6 +1006,7 @@ a:focus-visible {
   .lightbox-figure > img {
     max-height: calc(100dvh - 156px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     border-radius: var(--photo-radius);
+    clip-path: inset(0 round var(--photo-radius));
   }
 
   .lightbox-caption {
