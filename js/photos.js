@@ -338,6 +338,19 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A performer pointing into the crowd amid falling pink petals on stage."
   },
   {
+    "id": "298705",
+    "filename": "singer-pink-hair-red-stage-light.webp",
+    "width": 2696,
+    "height": 3200,
+    "captureMonth": "May",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A singer with long pink hair performing in red stage light."
+  },
+  {
     "id": "903797",
     "filename": "white-swan-dark-water.webp",
     "width": 2558,
