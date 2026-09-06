@@ -548,8 +548,8 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "work-086",
     "filename": "woman-cliff-edge-ocean-beach.webp",
-    "width": 3036,
-    "height": 2025,
+    "width": 3200,
+    "height": 2183,
     "captureMonth": "October",
     "captureYear": 2021,
     "sensitivity": "none",
@@ -1077,5 +1077,70 @@ window.PORTFOLIO_PHOTOS = [
       "travel"
     ],
     "alt": "A weathered stone bell tower framed by dark palm leaves."
+  },
+  {
+    "id": "work-091",
+    "filename": "classical-statue-red-lift-arm.webp",
+    "width": 2201,
+    "height": 3200,
+    "captureMonth": "May",
+    "captureYear": 2024,
+    "sensitivity": "none",
+    "tags": [
+      "travel"
+    ],
+    "alt": "A weathered stone statue framed by classical columns, partly obscured by a red service lift arm."
+  },
+  {
+    "id": "work-092",
+    "filename": "figure-chest-deep-reed-lake.webp",
+    "width": 2134,
+    "height": 3200,
+    "captureMonth": "July",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A partially nude figure standing chest-deep in a reed-lined lake, one hand held to her chest."
+  },
+  {
+    "id": "work-093",
+    "filename": "figure-floating-reed-lake.webp",
+    "width": 3200,
+    "height": 2133,
+    "captureMonth": "July",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure floating on her back among tall reeds in a still lake."
+  },
+  {
+    "id": "work-094",
+    "filename": "veiled-figure-reed-lake.webp",
+    "width": 2053,
+    "height": 3200,
+    "captureMonth": "July",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A figure veiled in wet white fabric, shoulder-deep in a reed-lined lake."
+  },
+  {
+    "id": "work-095",
+    "filename": "sleeping-foal-forest-clearing.webp",
+    "width": 3200,
+    "height": 2125,
+    "captureMonth": "July",
+    "captureYear": 2022,
+    "sensitivity": "none",
+    "tags": [
+      "wildlife"
+    ],
+    "alt": "A young foal sleeping curled beneath the legs of an adult horse in a forest clearing."
   }
 ];
