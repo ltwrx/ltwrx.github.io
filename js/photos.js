@@ -611,6 +611,32 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "An Italian flag above a stone tower crossed by overhead wires."
   },
   {
+    "id": "work-093",
+    "filename": "figure-floating-reed-lake.webp",
+    "width": 3200,
+    "height": 2133,
+    "captureMonth": "July",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure floating on her back among tall reeds in a still lake."
+  },
+  {
+    "id": "work-094",
+    "filename": "veiled-figure-reed-lake.webp",
+    "width": 2053,
+    "height": 3200,
+    "captureMonth": "July",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A figure veiled in wet white fabric, shoulder-deep in a reed-lined lake."
+  },
+  {
     "id": "work-087",
     "filename": "timber-pavilion-dusk-lights.webp",
     "width": 3200,
@@ -1103,32 +1129,6 @@ window.PORTFOLIO_PHOTOS = [
       "figure study"
     ],
     "alt": "A partially nude figure standing chest-deep in a reed-lined lake, one hand held to her chest."
-  },
-  {
-    "id": "work-093",
-    "filename": "figure-floating-reed-lake.webp",
-    "width": 3200,
-    "height": 2133,
-    "captureMonth": "July",
-    "captureYear": 2026,
-    "sensitivity": "sensitive",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A nude figure floating on her back among tall reeds in a still lake."
-  },
-  {
-    "id": "work-094",
-    "filename": "veiled-figure-reed-lake.webp",
-    "width": 2053,
-    "height": 3200,
-    "captureMonth": "July",
-    "captureYear": 2026,
-    "sensitivity": "none",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A figure veiled in wet white fabric, shoulder-deep in a reed-lined lake."
   },
   {
     "id": "work-095",
