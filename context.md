@@ -22,18 +22,24 @@ Changes appear immediately after saving.
 - Eagerly loaded 1050 px thumbnails: `images/thumbnails/`
 - Interface icons: `icons/`
 
-The order of entries in `photos.js` is the gallery order. Keep a photograph's
-stable `id` when replacing its file so existing `?photo=work-###` links remain
-valid. Sensitivity accepts `none`, `review` or `sensitive`; both gated values
-remain blurred until the visitor accepts the content notice.
+The order of entries in `photos.js` is the gallery order, which is independent
+from each photograph's `id`. Every `id` is a random 6-digit numeric string
+(e.g. `"482913"`), generated once when the photograph is added and never
+reused; it is what generates shareable links (`?photo=<id>`), and it stays
+fixed for that photograph even if the file is later replaced or moved to a
+different position in the gallery. When adding a new photograph, generate a
+fresh random 6-digit id that does not collide with any existing one.
+Sensitivity accepts `none`, `review` or `sensitive`; both gated values remain
+blurred until the visitor accepts the content notice.
 
 ## Replacing photographs
 
 Published photographs are metadata-stripped WebPs with matching thumbnails.
 When replacing one, update its semantic `filename`, `width` and `height` in
-`js/photos.js`, regenerate its thumbnail, and update the preload in `index.html`
-if it is the first photograph. Preserve the aspect ratio and remove private
-EXIF and GPS metadata before publishing.
+`js/photos.js`, regenerate its thumbnail, and update the preload in
+`index.html` if it is the first photograph. Preserve the aspect ratio and
+remove private EXIF and GPS metadata before publishing. Keep the photograph's
+existing `id` unchanged so its shareable link (`?photo=<id>`) stays valid.
 
 ## GitHub Pages
 
