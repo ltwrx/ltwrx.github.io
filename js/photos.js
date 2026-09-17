@@ -416,56 +416,69 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A sunlit path crossing a mountain forest."
   },
   {
-    "id": "115769",
-    "filename": "figure-seated-shadowed-forest.webp",
-    "width": 3200,
-    "height": 2133,
-    "captureMonth": "May",
-    "captureYear": 2025,
-    "sensitivity": "sensitive",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A nude figure seated among roots and leaves in a shadowed forest."
-  },
-  {
-    "id": "262677",
-    "filename": "figure-reclining-mossy-tree.webp",
-    "width": 2134,
+    "id": "459663",
+    "filename": "gothic-figure-night-cornfield.webp",
+    "width": 2133,
     "height": 3200,
-    "captureMonth": "May",
-    "captureYear": 2025,
+    "captureMonth": "September",
+    "captureYear": 2026,
     "sensitivity": "none",
     "tags": [
       "figure study"
     ],
-    "alt": "A nude figure reclining lengthwise on a mossy fallen tree."
+    "alt": "A gothic figure in black lace lingerie standing among corn stalks at night."
   },
   {
-    "id": "595449",
-    "filename": "figure-stretching-open-field.webp",
+    "id": "281350",
+    "filename": "motion-blur-figure-night-field.webp",
     "width": 2133,
     "height": 3200,
-    "captureMonth": "May",
-    "captureYear": 2025,
-    "sensitivity": "sensitive",
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "none",
     "tags": [
       "figure study"
     ],
-    "alt": "A nude figure stretching upward in an open field beneath a blue sky."
+    "alt": "A tattooed figure in motion blur, standing in a night field in stockings and boots."
   },
   {
-    "id": "483969",
-    "filename": "figure-reclining-green-forest.webp",
+    "id": "840450",
+    "filename": "tattooed-figure-open-jacket-night.webp",
     "width": 3200,
-    "height": 2133,
-    "captureMonth": "May",
-    "captureYear": 2025,
+    "height": 2134,
+    "captureMonth": "September",
+    "captureYear": 2026,
     "sensitivity": "sensitive",
     "tags": [
       "figure study"
     ],
-    "alt": "A nude figure reclining across a fallen tree in a green forest."
+    "alt": "A tattooed figure with an open jacket posing in a dark outdoor night setting."
+  },
+  {
+    "id": "105545",
+    "filename": "figure-candelabra-night-forest.webp",
+    "width": 3200,
+    "height": 2134,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A gothic figure in black lingerie standing in a night forest beside a lit candelabra."
+  },
+  {
+    "id": "569977",
+    "filename": "nude-figure-reclining-forest-branch.webp",
+    "width": 3200,
+    "height": 2133,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude tattooed figure reclining across a fallen branch in a night forest."
   },
   {
     "id": "801020",
@@ -611,69 +624,56 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A high-contrast architectural interior divided by bands of light."
   },
   {
-    "id": "459663",
-    "filename": "gothic-figure-night-cornfield.webp",
-    "width": 2133,
-    "height": 3200,
-    "captureMonth": "September",
-    "captureYear": 2026,
-    "sensitivity": "none",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A gothic figure in black lace lingerie standing among corn stalks at night."
-  },
-  {
-    "id": "281350",
-    "filename": "motion-blur-figure-night-field.webp",
-    "width": 2133,
-    "height": 3200,
-    "captureMonth": "September",
-    "captureYear": 2026,
-    "sensitivity": "none",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A tattooed figure in motion blur, standing in a night field in stockings and boots."
-  },
-  {
-    "id": "840450",
-    "filename": "tattooed-figure-open-jacket-night.webp",
-    "width": 3200,
-    "height": 2134,
-    "captureMonth": "September",
-    "captureYear": 2026,
-    "sensitivity": "sensitive",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A tattooed figure with an open jacket posing in a dark outdoor night setting."
-  },
-  {
-    "id": "105545",
-    "filename": "figure-candelabra-night-forest.webp",
-    "width": 3200,
-    "height": 2134,
-    "captureMonth": "September",
-    "captureYear": 2026,
-    "sensitivity": "sensitive",
-    "tags": [
-      "figure study"
-    ],
-    "alt": "A gothic figure in black lingerie standing in a night forest beside a lit candelabra."
-  },
-  {
-    "id": "569977",
-    "filename": "nude-figure-reclining-forest-branch.webp",
+    "id": "115769",
+    "filename": "figure-seated-shadowed-forest.webp",
     "width": 3200,
     "height": 2133,
-    "captureMonth": "September",
-    "captureYear": 2026,
+    "captureMonth": "May",
+    "captureYear": 2025,
     "sensitivity": "sensitive",
     "tags": [
       "figure study"
     ],
-    "alt": "A nude tattooed figure reclining across a fallen branch in a night forest."
+    "alt": "A nude figure seated among roots and leaves in a shadowed forest."
+  },
+  {
+    "id": "262677",
+    "filename": "figure-reclining-mossy-tree.webp",
+    "width": 2134,
+    "height": 3200,
+    "captureMonth": "May",
+    "captureYear": 2025,
+    "sensitivity": "none",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure reclining lengthwise on a mossy fallen tree."
+  },
+  {
+    "id": "595449",
+    "filename": "figure-stretching-open-field.webp",
+    "width": 2133,
+    "height": 3200,
+    "captureMonth": "May",
+    "captureYear": 2025,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure stretching upward in an open field beneath a blue sky."
+  },
+  {
+    "id": "483969",
+    "filename": "figure-reclining-green-forest.webp",
+    "width": 3200,
+    "height": 2133,
+    "captureMonth": "May",
+    "captureYear": 2025,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure reclining across a fallen tree in a green forest."
   },
   {
     "id": "243838",
