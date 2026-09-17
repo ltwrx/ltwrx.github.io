@@ -47,6 +47,8 @@
   let scrollCueTimer = null;
   let transitionRunning = false;
   let navigationQueue = [];
+  let syncCustomScrollbar = () => {};
+  let refreshCursorTargets = () => {};
 
   function readConsent() {
     try {
@@ -118,54 +120,269 @@
     document.body.append(cursor);
     document.documentElement.classList.add("has-custom-cursor");
 
+    const INTERACTIVE = "a[href], button:not([disabled]), #lightbox-image, .custom-scrollbar-thumb";
     const cursorRadius = 12;
+    const restScale = 0.25;
+    const fullScale = 1;
+    const proximityRadius = 96;
     let frame = null;
     let x = -60;
     let y = -60;
     let visible = false;
-    let overImage = false;
-    let pointerTarget = null;
+    let fillScale = restScale;
+    let targets = [];
+    let targetStamp = 0;
+    let metricScroll = -1;
+    let metricWidth = 0;
+    let metricHeight = 0;
 
-    const renderPosition = () => {
-      cursor.style.transform = `translate3d(${x - cursorRadius}px, ${y - cursorRadius}px, 0)`;
+    const collectTargets = () => {
+      const next = [];
+      const modal = !consentOverlay.hidden
+        ? consentOverlay
+        : !lightboxOverlay.hidden
+          ? lightboxOverlay
+          : null;
+      document.querySelectorAll(INTERACTIVE).forEach((element) => {
+        if (element.closest(".custom-cursor")) return;
+        if (modal) {
+          if (!modal.contains(element)) return;
+        } else if (element.closest(".modal-backdrop")) {
+          return;
+        }
+        const rect = element.getBoundingClientRect();
+        if (rect.width < 2 || rect.height < 2) return;
+        next.push(rect);
+      });
+      targets = next;
+      targetStamp = performance.now();
+      metricScroll = window.scrollY;
+      metricWidth = window.innerWidth;
+      metricHeight = window.innerHeight;
+    };
+
+    const nearestDistance = (px, py) => {
+      let min = Infinity;
+      for (let i = 0; i < targets.length; i += 1) {
+        const rect = targets[i];
+        const dx = px < rect.left ? rect.left - px : px > rect.right ? px - rect.right : 0;
+        const dy = py < rect.top ? rect.top - py : py > rect.bottom ? py - rect.bottom : 0;
+        const distance = dx === 0 && dy === 0 ? 0 : Math.hypot(dx, dy);
+        if (distance < min) min = distance;
+        if (min === 0) break;
+      }
+      return min;
+    };
+
+    const render = () => {
       frame = null;
+      if (
+        metricScroll !== window.scrollY ||
+        metricWidth !== window.innerWidth ||
+        metricHeight !== window.innerHeight ||
+        performance.now() - targetStamp > 90
+      ) {
+        collectTargets();
+      }
+
+      cursor.style.transform = `translate3d(${x - cursorRadius}px, ${y - cursorRadius}px, 0)`;
+
+      const distance = nearestDistance(x, y);
+      const proximity = distance >= proximityRadius ? 0 : 1 - distance / proximityRadius;
+      const eased = proximity * proximity * (3 - 2 * proximity);
+      const targetScale = restScale + (fullScale - restScale) * eased;
+      if (reducedMotion.matches) fillScale = targetScale;
+      else fillScale += (targetScale - fillScale) * 0.3;
+      if (Math.abs(fillScale - targetScale) < 0.002) fillScale = targetScale;
+      fill.style.transform = `scale(${fillScale})`;
+
+      if (Math.abs(fillScale - targetScale) > 0.002) {
+        frame = window.requestAnimationFrame(render);
+      }
+    };
+
+    const schedule = () => {
+      if (frame === null) frame = window.requestAnimationFrame(render);
     };
 
     const moveCursor = (event) => {
       x = event.clientX;
       y = event.clientY;
-      if (frame === null) frame = window.requestAnimationFrame(renderPosition);
-    };
-
-    const setImageState = (target) => {
-      const nextState = target instanceof Element && Boolean(target.closest(".photo-card, #lightbox-image"));
-      if (nextState === overImage) return;
-      overImage = nextState;
-      cursor.classList.toggle("is-over-image", overImage);
+      schedule();
     };
 
     const trackCursor = (event) => {
       moveCursor(event);
-      if (event.target !== pointerTarget) {
-        pointerTarget = event.target;
-        setImageState(pointerTarget);
-      }
       if (visible) return;
       visible = true;
       cursor.classList.add("is-visible");
     };
 
     const hideCursor = () => {
-      if (!visible && !overImage) return;
+      if (!visible) return;
       visible = false;
-      overImage = false;
-      pointerTarget = null;
-      cursor.classList.remove("is-visible", "is-over-image");
+      fillScale = restScale;
+      fill.style.transform = `scale(${restScale})`;
+      cursor.classList.remove("is-visible");
+    };
+
+    refreshCursorTargets = () => {
+      targetStamp = 0;
+      if (visible) schedule();
     };
 
     document.addEventListener("pointermove", trackCursor, { passive: true });
     document.documentElement.addEventListener("pointerleave", hideCursor);
     window.addEventListener("blur", hideCursor);
+    window.addEventListener("scroll", () => {
+      if (visible) schedule();
+    }, { passive: true });
+  }
+
+  function setupCustomScrollbar() {
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (!finePointer.matches) return;
+
+    const root = document.documentElement;
+    const track = document.createElement("div");
+    const thumb = document.createElement("div");
+    const pebble = document.createElement("span");
+    track.className = "custom-scrollbar";
+    thumb.className = "custom-scrollbar-thumb";
+    pebble.className = "custom-scrollbar-pebble";
+    thumb.append(pebble);
+    track.append(thumb);
+    track.setAttribute("aria-hidden", "true");
+    document.body.append(track);
+    root.classList.add("has-custom-scrollbar");
+
+    const allowMotion = !reducedMotion.matches;
+    const minThumb = 48;
+    const trackPad = 10;
+    let frame = null;
+    let lastScroll = window.scrollY;
+    let lastTime = performance.now();
+    let velocity = 0;
+    let squash = 0;
+    let displayY = trackPad;
+    let dragging = false;
+    let dragOffset = 0;
+    let metrics = { visible: false, thumb: minThumb, y: trackPad, maxScroll: 0, maxTravel: 0 };
+
+    const readMetrics = () => {
+      const view = root.clientHeight;
+      const content = root.scrollHeight;
+      const maxScroll = Math.max(0, content - view);
+      const travel = Math.max(0, view - trackPad * 2);
+      const thumbSize = maxScroll === 0 ? travel : Math.max(minThumb, Math.round((view / content) * travel));
+      const maxTravel = Math.max(0, travel - thumbSize);
+      const y = maxScroll === 0 ? trackPad : trackPad + (window.scrollY / maxScroll) * maxTravel;
+      return {
+        visible: maxScroll > 1 && !bodyLockState,
+        thumb: thumbSize,
+        y,
+        maxScroll,
+        maxTravel,
+      };
+    };
+
+    const tick = (now) => {
+      frame = null;
+      metrics = readMetrics();
+      track.classList.toggle("is-visible", metrics.visible);
+      if (!metrics.visible) {
+        velocity = 0;
+        squash = 0;
+        displayY = metrics.y;
+        return;
+      }
+
+      const dt = Math.max(8, now - lastTime);
+      const nextScroll = window.scrollY;
+      const instant = (nextScroll - lastScroll) / dt;
+      velocity = velocity * 0.92 + instant * 0.08;
+      lastScroll = nextScroll;
+      lastTime = now;
+
+      if (allowMotion && !dragging) {
+        squash += (Math.min(1, Math.abs(velocity) * 5) - squash) * 0.07;
+      } else {
+        squash *= 0.9;
+      }
+      if (squash < 0.004) squash = 0;
+      if (Math.abs(velocity) < 0.0015) velocity = 0;
+
+      displayY += (metrics.y - displayY) * (allowMotion && !dragging ? 0.16 : 1);
+
+      const stretch = allowMotion ? 1 + squash * 0.07 : 1;
+      const thin = allowMotion ? 1 - squash * 0.16 : 1;
+      pebble.style.transformOrigin = "center center";
+      pebble.style.transform = `scaleX(${thin}) scaleY(${stretch})`;
+      thumb.style.height = `${metrics.thumb}px`;
+      thumb.style.transform = `translate3d(0, ${displayY}px, 0)`;
+      track.classList.toggle("is-scrolling", (squash > 0 || velocity !== 0) && !dragging);
+
+      if (squash > 0 || velocity !== 0 || Math.abs(displayY - metrics.y) > 0.2) {
+        frame = window.requestAnimationFrame(tick);
+      }
+    };
+
+    const schedule = () => {
+      if (frame === null) frame = window.requestAnimationFrame(tick);
+    };
+
+    const scrollToRatio = (clientY) => {
+      if (metrics.maxTravel <= 0) return;
+      const y = Math.min(metrics.maxTravel, Math.max(0, clientY - trackPad - dragOffset));
+      window.scrollTo({ top: (y / metrics.maxTravel) * metrics.maxScroll, behavior: "auto" });
+    };
+
+    thumb.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0) return;
+      dragging = true;
+      track.classList.add("is-dragging");
+      dragOffset = event.clientY - thumb.getBoundingClientRect().top;
+      thumb.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    });
+
+    thumb.addEventListener("pointermove", (event) => {
+      if (!dragging) return;
+      scrollToRatio(event.clientY);
+      schedule();
+    });
+
+    const endDrag = (event) => {
+      if (!dragging) return;
+      dragging = false;
+      track.classList.remove("is-dragging");
+      if (thumb.hasPointerCapture(event.pointerId)) thumb.releasePointerCapture(event.pointerId);
+      schedule();
+    };
+
+    thumb.addEventListener("pointerup", endDrag);
+    thumb.addEventListener("pointercancel", endDrag);
+    thumb.addEventListener("pointerenter", () => track.classList.add("is-hover"));
+    thumb.addEventListener("pointerleave", () => {
+      if (!dragging) track.classList.remove("is-hover");
+    });
+
+    track.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || event.target === thumb || thumb.contains(event.target)) return;
+      metrics = readMetrics();
+      dragOffset = metrics.thumb / 2;
+      scrollToRatio(event.clientY);
+      schedule();
+    });
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(schedule).observe(root);
+    }
+
+    syncCustomScrollbar = schedule;
+    schedule();
   }
 
   function applySiteContent() {
@@ -381,6 +598,8 @@
 
     gallery.style.height = `${Math.max(...heights) - gap}px`;
     gallery.classList.add("is-ready");
+    syncCustomScrollbar();
+    refreshCursorTargets();
   }
   function requestLayout() {
     if (layoutFrame !== null) cancelAnimationFrame(layoutFrame);
@@ -397,6 +616,8 @@
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     body.style.overflow = "hidden";
     if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`;
+    syncCustomScrollbar();
+    refreshCursorTargets();
   }
 
   function unlockBody() {
@@ -404,6 +625,8 @@
     document.body.style.overflow = bodyLockState.overflow;
     document.body.style.paddingRight = bodyLockState.paddingRight;
     bodyLockState = null;
+    syncCustomScrollbar();
+    refreshCursorTargets();
   }
 
   function rememberFocus() {
@@ -912,6 +1135,7 @@
   applySiteContent();
   createGallery();
   setupCustomCursor();
+  setupCustomScrollbar();
 
   if ("ResizeObserver" in window && gallery) {
     new ResizeObserver(requestLayout).observe(gallery);

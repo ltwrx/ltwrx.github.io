@@ -117,6 +117,19 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A dark lake sunset divided by reflections and a diagonal foreground line."
   },
   {
+    "id": "607014",
+    "filename": "gothic-portrait-chains-night.webp",
+    "width": 3200,
+    "height": 2400,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "portrait"
+    ],
+    "alt": "A close gothic portrait with pale makeup, looking upward while holding silver chains."
+  },
+  {
     "id": "472897",
     "filename": "tropical-leaves-balcony.webp",
     "width": 2034,
@@ -598,6 +611,71 @@ window.PORTFOLIO_PHOTOS = [
     "alt": "A high-contrast architectural interior divided by bands of light."
   },
   {
+    "id": "459663",
+    "filename": "gothic-figure-night-cornfield.webp",
+    "width": 2133,
+    "height": 3200,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A gothic figure in black lace lingerie standing among corn stalks at night."
+  },
+  {
+    "id": "281350",
+    "filename": "motion-blur-figure-night-field.webp",
+    "width": 2133,
+    "height": 3200,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "none",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A tattooed figure in motion blur, standing in a night field in stockings and boots."
+  },
+  {
+    "id": "840450",
+    "filename": "tattooed-figure-open-jacket-night.webp",
+    "width": 3200,
+    "height": 2134,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A tattooed figure with an open jacket posing in a dark outdoor night setting."
+  },
+  {
+    "id": "105545",
+    "filename": "figure-candelabra-night-forest.webp",
+    "width": 3200,
+    "height": 2134,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A gothic figure in black lingerie standing in a night forest beside a lit candelabra."
+  },
+  {
+    "id": "569977",
+    "filename": "nude-figure-reclining-forest-branch.webp",
+    "width": 3200,
+    "height": 2133,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude tattooed figure reclining across a fallen branch in a night forest."
+  },
+  {
     "id": "243838",
     "filename": "street-lamp-ochre-building.webp",
     "width": 2370,
@@ -648,6 +726,32 @@ window.PORTFOLIO_PHOTOS = [
       "figure study"
     ],
     "alt": "A figure veiled in wet white fabric, shoulder-deep in a reed-lined lake."
+  },
+  {
+    "id": "106745",
+    "filename": "nude-figure-night-forest-monochrome.webp",
+    "width": 3200,
+    "height": 2286,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure standing beside a slender tree in a dark woodland, photographed in black and white."
+  },
+  {
+    "id": "742381",
+    "filename": "nude-figure-from-behind-night-forest.webp",
+    "width": 2134,
+    "height": 3200,
+    "captureMonth": "September",
+    "captureYear": 2026,
+    "sensitivity": "sensitive",
+    "tags": [
+      "figure study"
+    ],
+    "alt": "A nude figure seen from behind, standing among dense branches in a night forest."
   },
   {
     "id": "977516",
