@@ -868,8 +868,12 @@ a:focus-visible {
   text-transform: uppercase;
 }
 
-.lightbox-caption > div,
-.lightbox-caption > span {
+.lightbox-caption-row {
+  display: contents;
+}
+
+.lightbox-caption-row > div,
+.lightbox-caption-row > span {
   display: inline-flex;
   flex-wrap: wrap;
   gap: 7px;
@@ -1110,7 +1114,7 @@ a:focus-visible {
   .lightbox-dialog {
     grid-template-columns: 1fr;
     align-items: stretch;
-    padding: 42px 0 52px;
+    padding: 42px 0 0;
     overflow: hidden;
   }
 
@@ -1121,19 +1125,54 @@ a:focus-visible {
   }
 
   .lightbox-figure > img {
-    max-height: calc(100dvh - 156px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    max-height: 100%;
     border-radius: var(--photo-radius);
     clip-path: inset(0 round var(--photo-radius));
   }
 
+  /* Two rows pinned to the bottom edge: date, type, count and copy link above;
+     muse and copyright below. */
   .lightbox-caption {
-    min-height: 44px;
-    justify-content: flex-start;
+    width: 100%;
+    min-height: 0;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+    gap: 6px;
     padding-inline: 4px;
+    white-space: nowrap;
   }
 
-  .lightbox-credit {
-    display: none !important;
+  .lightbox-caption-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .lightbox-caption-row > div,
+  .lightbox-caption-row > span {
+    flex: none;
+  }
+
+  .lightbox-caption-row > div,
+  .lightbox-caption-row > #lightbox-credit {
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: normal;
+  }
+
+  .lightbox-caption-row > #lightbox-credit {
+    flex-wrap: nowrap;
+    gap: 0.5em;
+  }
+
+  .muse-name {
+    min-width: 0;
+  }
+
+  .copy-link,
+  .lightbox-caption-row > .lightbox-credit {
+    margin-left: auto;
   }
 
   .lightbox-nav {
@@ -1143,7 +1182,7 @@ a:focus-visible {
   .lightbox-scroll-cue {
     position: absolute;
     left: 50%;
-    bottom: max(4px, env(safe-area-inset-bottom));
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 56px);
     z-index: 4;
     display: flex;
     flex-direction: column;
