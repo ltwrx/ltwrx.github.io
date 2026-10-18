@@ -29,6 +29,9 @@ reused; it is what generates shareable links (`?photo=<id>`), and it stays
 fixed for that photograph even if the file is later replaced or moved to a
 different position in the gallery. When adding a new photograph, generate a
 fresh random 6-digit id that does not collide with any existing one.
+To credit a model, add `"muse": "Name"` to a photograph's entry (or an array
+of names for several people). The lightbox shows it as `MUSE: NAME` just before
+the copyright line; photographs without the field show nothing.
 Sensitivity accepts `none`, `review` or `sensitive`; both gated values remain
 blurred until the visitor accepts the content notice.
 

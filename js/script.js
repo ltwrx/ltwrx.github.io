@@ -716,19 +716,9 @@
     photoCount.textContent = `${String(index + 1).padStart(2, "0")} / ${String(photos.length).padStart(2, "0")}`;
 
     photoCredit.replaceChildren();
-    if (photo.creditName) {
-      const prefix = document.createTextNode(photo.creditRole ? `${photo.creditRole}: ` : "Credit: ");
-      photoCredit.append(prefix);
-      if (photo.creditLink) {
-        const link = document.createElement("a");
-        link.href = photo.creditLink;
-        link.target = "_blank";
-        link.rel = "noreferrer";
-        link.textContent = photo.creditName;
-        photoCredit.append(link);
-      } else {
-        photoCredit.append(document.createTextNode(photo.creditName));
-      }
+    const muses = [].concat(photo.muse || []).filter(Boolean);
+    if (muses.length) {
+      photoCredit.textContent = `${muses.length > 1 ? "Muses" : "Muse"}: ${muses.join(", ")}`;
       photoCredit.hidden = false;
     } else {
       photoCredit.hidden = true;
