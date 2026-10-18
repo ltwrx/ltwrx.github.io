@@ -868,15 +868,21 @@ a:focus-visible {
   text-transform: uppercase;
 }
 
-.lightbox-caption-row {
-  display: contents;
-}
-
-.lightbox-caption-row > div,
-.lightbox-caption-row > span {
+.lightbox-caption > div,
+.lightbox-caption > span {
   display: inline-flex;
   flex-wrap: wrap;
   gap: 7px;
+}
+
+.lightbox-caption [hidden] {
+  display: none;
+}
+
+/* Each changing line clips its own text, so a photograph's details can roll
+   out and in without leaving their place. */
+.lightbox-roll {
+  overflow: hidden;
 }
 
 .lightbox-caption strong {
@@ -922,7 +928,7 @@ a:focus-visible {
 }
 
 .muse-name {
-  color: var(--paper);
+  color: var(--paper-muted);
 }
 
 .lightbox-close,
@@ -1130,49 +1136,68 @@ a:focus-visible {
     clip-path: inset(0 round var(--photo-radius));
   }
 
-  /* Two rows pinned to the bottom edge: date, type, count and copy link above;
-     muse and copyright below. */
+  /* Pinned to the bottom edge. Top line: the muse (when there is one) and the
+     copy link. Bottom line: date, type and count, with the copyright on the
+     right. If a phone is too narrow, the copyright drops to its own line. */
   .lightbox-caption {
     width: 100%;
     min-height: 0;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-end;
-    gap: 6px;
-    padding-inline: 4px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0 14px;
+    padding-inline: 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
     white-space: nowrap;
   }
 
-  .lightbox-caption-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
+  /* Forces the line break between the two lines. */
+  .lightbox-caption::before {
+    content: "";
+    order: 3;
+    flex: 0 0 100%;
+    height: 0;
   }
 
-  .lightbox-caption-row > div,
-  .lightbox-caption-row > span {
-    flex: none;
+  .lightbox-caption > .lightbox-muse {
+    order: 1;
+    flex: 0 1 auto;
+    flex-wrap: nowrap;
+    min-width: 0;
+    gap: 0.6em;
+    white-space: normal;
   }
 
-  .lightbox-caption-row > div,
-  .lightbox-caption-row > #lightbox-credit {
+  .lightbox-caption > .copy-link {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .lightbox-caption > .lightbox-info,
+  .lightbox-caption > .lightbox-count,
+  .lightbox-caption > .lightbox-credit {
+    margin-top: 6px;
+  }
+
+  .lightbox-caption > .lightbox-info {
+    order: 4;
     flex: 0 1 auto;
     min-width: 0;
     white-space: normal;
   }
 
-  .lightbox-caption-row > #lightbox-credit {
-    flex-wrap: nowrap;
-    gap: 0.5em;
+  .lightbox-caption > .lightbox-count {
+    order: 5;
+  }
+
+  .lightbox-caption > .lightbox-credit {
+    order: 6;
+    margin-left: auto;
   }
 
   .muse-name {
     min-width: 0;
-  }
-
-  .copy-link,
-  .lightbox-caption-row > .lightbox-credit {
-    margin-left: auto;
   }
 
   .lightbox-nav {
@@ -1200,7 +1225,7 @@ a:focus-visible {
     transform: translate3d(-50%, 0, 0);
   }
 
-  .lightbox.show-scroll-cue .lightbox-figure {
+  .lightbox.show-scroll-cue .lightbox-figure > img {
     animation: mobile-picture-nudge 1100ms cubic-bezier(0.22, 1, 0.36, 1) 620ms 1;
   }
 

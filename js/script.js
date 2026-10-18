@@ -13,6 +13,7 @@
   const lightboxOverlay = document.querySelector("#lightbox-overlay");
   const lightboxDialog = document.querySelector("#lightbox-dialog");
   const lightboxFigure = document.querySelector(".lightbox-figure");
+  const lightboxCaption = document.querySelector(".lightbox-caption");
   const lightboxImage = document.querySelector("#lightbox-image");
   const lightboxImageFallback = document.querySelector("#lightbox-image-fallback");
   const lightboxTitle = document.querySelector("#lightbox-title");
@@ -718,10 +719,12 @@
     photoCredit.replaceChildren();
     const muses = [].concat(photo.muse || []).filter(Boolean);
     if (muses.length) {
+      const label = document.createElement("span");
+      label.textContent = `${muses.length > 1 ? "Muses" : "Muse"}:`;
       const names = document.createElement("span");
       names.className = "muse-name";
       names.textContent = muses.join(", ");
-      photoCredit.append(`${muses.length > 1 ? "Muses" : "Muse"}: `, names);
+      photoCredit.append(label, names);
       photoCredit.hidden = false;
     } else {
       photoCredit.hidden = true;
@@ -838,6 +841,44 @@
     window.setTimeout(() => closeButton.focus({ preventScroll: true }), 0);
   }
 
+  // Desktop slides the whole figure. On mobile the caption stays pinned to the
+  // bottom edge: only the picture moves, while the lines that change from one
+  // photograph to the next roll out and back in without leaving their place.
+  const pictureElements = [lightboxImage, lightboxImageFallback];
+  const pictureTargets = () => (mobileLightbox.matches ? pictureElements : [lightboxFigure]);
+  const captionLines = () => Array.from(lightboxCaption.querySelectorAll(".lightbox-roll > *"));
+  const captionRollTargets = () => (mobileLightbox.matches ? captionLines() : []);
+
+  function setMotionStyles(targets, transform, opacity) {
+    targets.forEach((element) => {
+      element.style.transform = transform;
+      element.style.opacity = opacity;
+    });
+  }
+
+  function clearMotionStyles(targets) {
+    targets.forEach((element) => {
+      element.style.removeProperty("transform");
+      element.style.removeProperty("opacity");
+    });
+  }
+
+  function resetMotion(cancelAnimations = false) {
+    const targets = [lightboxFigure, ...pictureElements, ...captionLines()];
+    if (cancelAnimations) {
+      targets.forEach((element) => element.getAnimations().forEach((animation) => animation.cancel()));
+    }
+    clearMotionStyles(targets);
+  }
+
+  function playMotion(targets, keyframes, options) {
+    const animations = targets.map((element) => element.animate(keyframes, options));
+    return {
+      finished: Promise.all(animations.map((animation) => animation.finished)),
+      cancel: () => animations.forEach((animation) => animation.cancel()),
+    };
+  }
+
   function hideLightbox(restore = true) {
     clearScrollCue();
     navigationQueue.length = 0;
@@ -845,9 +886,7 @@
     activeIndex = null;
     openedWithPush = false;
     lightboxImage.removeAttribute("src");
-    lightboxFigure.getAnimations().forEach((animation) => animation.cancel());
-    lightboxFigure.style.removeProperty("transform");
-    lightboxFigure.style.removeProperty("opacity");
+    resetMotion(true);
     transitionRunning = false;
     unlockBody();
     if (restore) restoreFocus();
@@ -890,12 +929,12 @@
       await targetReady;
       commitNavigation(candidate);
       await waitForDisplayedPhoto();
-      lightboxFigure.style.removeProperty("transform");
-      lightboxFigure.style.removeProperty("opacity");
+      resetMotion();
       return;
     }
 
     const mobile = mobileLightbox.matches;
+    const picture = pictureTargets();
     const start = mobile
       ? `translate3d(0, ${dragOffset}px, 0)`
       : "translate3d(0, 0, 0)";
@@ -906,33 +945,46 @@
       ? `translate3d(0, ${direction > 0 ? "18vh" : "-18vh"}, 0)`
       : `translate3d(${direction > 0 ? "12vw" : "-12vw"}, 0, 0)`;
 
-    lightboxFigure.style.removeProperty("transform");
-    lightboxFigure.style.removeProperty("opacity");
-    const exitAnimation = lightboxFigure.animate(
-      [
-        { transform: start, opacity: 1 },
-        { transform: outgoing, opacity: 0 },
-      ],
-      { duration: mobile ? 210 : 240, easing: "cubic-bezier(0.55, 0, 1, 0.45)", fill: "forwards" },
-    );
-    await Promise.all([exitAnimation.finished, targetReady]);
+    // The caption lines roll one line height, in the same direction as the picture.
+    const rollOut = `translate3d(0, ${direction > 0 ? "-110%" : "110%"}, 0)`;
+    const rollIn = `translate3d(0, ${direction > 0 ? "110%" : "-110%"}, 0)`;
+    const rest = "translate3d(0, 0, 0)";
+
+    resetMotion();
+    const exitOptions = { duration: mobile ? 210 : 240, easing: "cubic-bezier(0.55, 0, 1, 0.45)", fill: "forwards" };
+    const exitAnimation = playMotion(picture, [
+      { transform: start, opacity: 1 },
+      { transform: outgoing, opacity: 0 },
+    ], exitOptions);
+    const captionExit = playMotion(captionRollTargets(), [
+      { transform: rest, opacity: 1 },
+      { transform: rollOut, opacity: 0 },
+    ], exitOptions);
+    await Promise.all([exitAnimation.finished, captionExit.finished, targetReady]);
     commitNavigation(candidate);
     await waitForDisplayedPhoto();
     subtleHaptic();
-    lightboxFigure.style.transform = incoming;
-    lightboxFigure.style.opacity = "0";
-    const enterAnimation = lightboxFigure.animate(
-      [
-        { transform: incoming, opacity: 0 },
-        { transform: "translate3d(0, 0, 0)", opacity: 1 },
-      ],
-      { duration: mobile ? 430 : 460, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "both" },
-    );
+
+    // Rendering the new photograph replaced the muse line, so look the lines up again.
+    const incomingLines = captionRollTargets();
+    setMotionStyles(picture, incoming, "0");
+    setMotionStyles(incomingLines, rollIn, "0");
+    const enterOptions = { duration: mobile ? 430 : 460, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "both" };
+    const enterAnimation = playMotion(picture, [
+      { transform: incoming, opacity: 0 },
+      { transform: rest, opacity: 1 },
+    ], enterOptions);
+    const captionEnter = playMotion(incomingLines, [
+      { transform: rollIn, opacity: 0 },
+      { transform: rest, opacity: 1 },
+    ], enterOptions);
     exitAnimation.cancel();
-    await enterAnimation.finished;
-    lightboxFigure.style.transform = "translate3d(0, 0, 0)";
-    lightboxFigure.style.opacity = "1";
+    captionExit.cancel();
+    await Promise.all([enterAnimation.finished, captionEnter.finished]);
+    setMotionStyles(picture, rest, "1");
+    clearMotionStyles(incomingLines);
     enterAnimation.cancel();
+    captionEnter.cancel();
   }
 
   async function navigate(direction, dragOffset = 0) {
@@ -954,8 +1006,7 @@
     } catch {
       if (!lightboxOverlay.hidden && activeIndex !== candidate) commitNavigation(candidate);
     } finally {
-      lightboxFigure.style.removeProperty("transform");
-      lightboxFigure.style.removeProperty("opacity");
+      resetMotion();
       transitionRunning = false;
     }
 
@@ -1080,7 +1131,7 @@
     const touch = event.changedTouches[0];
     touchStart = { x: touch.clientX, y: touch.clientY, offset: 0 };
     clearScrollCue();
-    lightboxFigure.getAnimations().forEach((animation) => animation.cancel());
+    pictureTargets().forEach((element) => element.getAnimations().forEach((animation) => animation.cancel()));
   }
 
   function handleTouchMove(event) {
@@ -1092,8 +1143,11 @@
     event.preventDefault();
     const offset = Math.max(-96, Math.min(96, dy * 0.72));
     touchStart.offset = offset;
-    lightboxFigure.style.transform = `translate3d(0, ${offset}px, 0)`;
-    lightboxFigure.style.opacity = String(1 - Math.min(Math.abs(offset) / 420, 0.18));
+    setMotionStyles(
+      pictureTargets(),
+      `translate3d(0, ${offset}px, 0)`,
+      String(1 - Math.min(Math.abs(offset) / 420, 0.18)),
+    );
   }
 
   function handleTouchEnd(event) {
@@ -1107,22 +1161,23 @@
       navigate(dy < 0 ? 1 : -1, offset);
       return;
     }
-    lightboxFigure.animate(
-      [
-        { transform: `translate3d(0, ${offset}px, 0)`, opacity: lightboxFigure.style.opacity || 1 },
-        { transform: "translate3d(0, 0, 0)", opacity: 1 },
-      ],
-      { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
-    );
-    lightboxFigure.style.removeProperty("transform");
-    lightboxFigure.style.removeProperty("opacity");
+    const picture = pictureTargets();
+    picture.forEach((element) => {
+      element.animate(
+        [
+          { transform: `translate3d(0, ${offset}px, 0)`, opacity: element.style.opacity || 1 },
+          { transform: "translate3d(0, 0, 0)", opacity: 1 },
+        ],
+        { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+      );
+    });
+    clearMotionStyles(picture);
   }
 
   function handleTouchCancel() {
     if (!touchStart) return;
     touchStart = null;
-    lightboxFigure.style.removeProperty("transform");
-    lightboxFigure.style.removeProperty("opacity");
+    clearMotionStyles(pictureTargets());
   }
 
   applySiteContent();
