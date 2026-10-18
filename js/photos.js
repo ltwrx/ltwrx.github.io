@@ -41,6 +41,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "591654",
     "filename": "woman-red-cloud-painted-wall.webp",
+    "muse": "PAP_PSON",
     "width": 2133,
     "height": 3200,
     "captureMonth": "May",
@@ -119,6 +120,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "607014",
     "filename": "gothic-portrait-chains-night.webp",
+    "muse": "PROFANAZJA",
     "width": 3200,
     "height": 2400,
     "captureMonth": "September",
@@ -158,6 +160,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "257605",
     "filename": "woman-red-dress-stone-steps.webp",
+    "muse": "PAP_PSON",
     "width": 2019,
     "height": 3200,
     "captureMonth": "May",
@@ -197,6 +200,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "841843",
     "filename": "woman-black-dress-pink-buildings.webp",
+    "muse": "LAURENCJA",
     "width": 2133,
     "height": 3200,
     "captureMonth": "June",
@@ -223,6 +227,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "292256",
     "filename": "woman-black-ivy-stone.webp",
+    "muse": "LAURENCJA",
     "width": 3200,
     "height": 2134,
     "captureMonth": "June",
@@ -236,6 +241,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "699926",
     "filename": "woodland-portrait-green.webp",
+    "muse": "LAURENCJA",
     "width": 3200,
     "height": 1985,
     "captureMonth": "June",
@@ -249,6 +255,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "534987",
     "filename": "figures-embracing-snowy-woodland.webp",
+    "muse": "WIWI & KARASU",
     "width": 2053,
     "height": 2989,
     "captureMonth": "February",
@@ -262,6 +269,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "731694",
     "filename": "figure-yellow-sign-snow.webp",
+    "muse": "WIWI & KARASU",
     "width": 2382,
     "height": 3200,
     "captureMonth": "February",
@@ -275,6 +283,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "189863",
     "filename": "figure-white-fabric-snow.webp",
+    "muse": "WIWI & KARASU",
     "width": 2133,
     "height": 3200,
     "captureMonth": "February",
@@ -288,6 +297,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "562492",
     "filename": "figures-embracing-winter-tree.webp",
+    "muse": "WIWI & KARASU",
     "width": 2133,
     "height": 3200,
     "captureMonth": "February",
@@ -301,6 +311,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "851387",
     "filename": "intimate-portrait-winter-forest.webp",
+    "muse": "WIWI & KARASU",
     "width": 2171,
     "height": 3200,
     "captureMonth": "February",
@@ -327,6 +338,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "775017",
     "filename": "rapper-silhouette-stage-lights.webp",
+    "muse": "PROBL3M",
     "width": 3200,
     "height": 1919,
     "captureMonth": "May",
@@ -340,6 +352,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "249716",
     "filename": "rapper-pink-petals-concert.webp",
+    "muse": "WHITE2115",
     "width": 3200,
     "height": 2459,
     "captureMonth": "May",
@@ -353,6 +366,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "298705",
     "filename": "singer-pink-hair-red-stage-light.webp",
+    "muse": "YOUNGLEOSIA",
     "width": 2696,
     "height": 3200,
     "captureMonth": "May",
@@ -418,6 +432,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "459663",
     "filename": "gothic-figure-night-cornfield.webp",
+    "muse": "PROFANAZJA",
     "width": 2133,
     "height": 3200,
     "captureMonth": "September",
@@ -431,6 +446,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "281350",
     "filename": "motion-blur-figure-night-field.webp",
+    "muse": "PROFANAZJA",
     "width": 2133,
     "height": 3200,
     "captureMonth": "September",
@@ -444,6 +460,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "840450",
     "filename": "tattooed-figure-open-jacket-night.webp",
+    "muse": "PROFANAZJA",
     "width": 3200,
     "height": 2134,
     "captureMonth": "September",
@@ -457,6 +474,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "105545",
     "filename": "figure-candelabra-night-forest.webp",
+    "muse": "PROFANAZJA",
     "width": 3200,
     "height": 2134,
     "captureMonth": "September",
@@ -470,6 +488,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "569977",
     "filename": "nude-figure-reclining-forest-branch.webp",
+    "muse": "PROFANAZJA",
     "width": 3200,
     "height": 2133,
     "captureMonth": "September",
@@ -626,6 +645,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "115769",
     "filename": "figure-seated-shadowed-forest.webp",
+    "muse": "WIWI",
     "width": 3200,
     "height": 2133,
     "captureMonth": "May",
@@ -639,6 +659,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "262677",
     "filename": "figure-reclining-mossy-tree.webp",
+    "muse": "WIWI",
     "width": 2134,
     "height": 3200,
     "captureMonth": "May",
@@ -652,6 +673,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "595449",
     "filename": "figure-stretching-open-field.webp",
+    "muse": "WIWI",
     "width": 2133,
     "height": 3200,
     "captureMonth": "May",
@@ -665,6 +687,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "483969",
     "filename": "figure-reclining-green-forest.webp",
+    "muse": "WIWI",
     "width": 3200,
     "height": 2133,
     "captureMonth": "May",
@@ -704,6 +727,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "136308",
     "filename": "figure-floating-reed-lake.webp",
+    "muse": "LAURENCJA",
     "width": 3200,
     "height": 2133,
     "captureMonth": "July",
@@ -717,6 +741,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "830132",
     "filename": "veiled-figure-reed-lake.webp",
+    "muse": "LAURENCJA",
     "width": 2053,
     "height": 3200,
     "captureMonth": "July",
@@ -730,6 +755,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "106745",
     "filename": "nude-figure-night-forest-monochrome.webp",
+    "muse": "PROFANAZJA",
     "width": 3200,
     "height": 2286,
     "captureMonth": "September",
@@ -743,6 +769,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "742381",
     "filename": "nude-figure-from-behind-night-forest.webp",
+    "muse": "PROFANAZJA",
     "width": 2134,
     "height": 3200,
     "captureMonth": "September",
@@ -886,6 +913,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "735056",
     "filename": "red-dress-sunlit-wall.webp",
+    "muse": "PAP_PSON",
     "width": 2133,
     "height": 3200,
     "captureMonth": "May",
@@ -899,6 +927,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "359945",
     "filename": "woman-red-warm-stone-street.webp",
+    "muse": "PAP_PSON",
     "width": 2133,
     "height": 3200,
     "captureMonth": "May",
@@ -912,6 +941,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "186891",
     "filename": "monochrome-portrait-patterned-fabric.webp",
+    "muse": "PAP_PSON",
     "width": 3200,
     "height": 2134,
     "captureMonth": "May",
@@ -925,6 +955,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "538371",
     "filename": "woman-red-sunlit-passage.webp",
+    "muse": "PAP_PSON",
     "width": 2133,
     "height": 3200,
     "captureMonth": "May",
@@ -938,6 +969,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "457505",
     "filename": "red-dress-blue-doorway.webp",
+    "muse": "PAP_PSON",
     "width": 2134,
     "height": 3200,
     "captureMonth": "May",
@@ -951,6 +983,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "765873",
     "filename": "woman-red-blue-doorway.webp",
+    "muse": "PAP_PSON",
     "width": 3200,
     "height": 3200,
     "captureMonth": "May",
@@ -1237,6 +1270,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "403305",
     "filename": "figure-chest-deep-reed-lake.webp",
+    "muse": "LAURENCJA",
     "width": 2134,
     "height": 3200,
     "captureMonth": "July",
