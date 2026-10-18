@@ -718,7 +718,10 @@
     photoCredit.replaceChildren();
     const muses = [].concat(photo.muse || []).filter(Boolean);
     if (muses.length) {
-      photoCredit.textContent = `${muses.length > 1 ? "Muses" : "Muse"}: ${muses.join(", ")}`;
+      const names = document.createElement("span");
+      names.className = "muse-name";
+      names.textContent = muses.join(", ");
+      photoCredit.append(`${muses.length > 1 ? "Muses" : "Muse"}: `, names);
       photoCredit.hidden = false;
     } else {
       photoCredit.hidden = true;

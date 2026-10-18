@@ -917,6 +917,10 @@ a:focus-visible {
   margin-left: auto;
 }
 
+.muse-name {
+  color: var(--paper);
+}
+
 .lightbox-close,
 .lightbox-nav {
   position: absolute;
