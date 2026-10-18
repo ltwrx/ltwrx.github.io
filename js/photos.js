@@ -108,8 +108,8 @@ window.PORTFOLIO_PHOTOS = [
     "filename": "dark-lake-sunset-reflections.webp",
     "width": 3200,
     "height": 1652,
-    "captureMonth": "August",
-    "captureYear": 2026,
+    "captureMonth": "September",
+    "captureYear": 2023,
     "sensitivity": "none",
     "tags": [
       "landscape"
@@ -147,8 +147,8 @@ window.PORTFOLIO_PHOTOS = [
     "filename": "blue-gold-macaw-branches.webp",
     "width": 3200,
     "height": 2277,
-    "captureMonth": "August",
-    "captureYear": 2026,
+    "captureMonth": "October",
+    "captureYear": 2023,
     "sensitivity": "none",
     "tags": [
       "wildlife"
@@ -186,8 +186,8 @@ window.PORTFOLIO_PHOTOS = [
     "filename": "stars-over-dark-forest.webp",
     "width": 2220,
     "height": 3200,
-    "captureMonth": "August",
-    "captureYear": 2026,
+    "captureMonth": "June",
+    "captureYear": 2020,
     "sensitivity": "none",
     "tags": [
       "landscape"
@@ -1122,7 +1122,7 @@ window.PORTFOLIO_PHOTOS = [
     "filename": "red-squirrel-close-portrait.webp",
     "width": 3200,
     "height": 2133,
-    "captureMonth": "September",
+    "captureMonth": "October",
     "captureYear": 2023,
     "sensitivity": "none",
     "tags": [
@@ -1174,8 +1174,8 @@ window.PORTFOLIO_PHOTOS = [
     "filename": "suspended-water-droplets.webp",
     "width": 1149,
     "height": 1593,
-    "captureMonth": "August",
-    "captureYear": 2026,
+    "captureMonth": "April",
+    "captureYear": 2019,
     "sensitivity": "none",
     "tags": [
       "landscape"
@@ -1187,8 +1187,8 @@ window.PORTFOLIO_PHOTOS = [
     "filename": "weathered-apple-winter-branches.webp",
     "width": 2665,
     "height": 1785,
-    "captureMonth": "August",
-    "captureYear": 2026,
+    "captureMonth": "January",
+    "captureYear": 2019,
     "sensitivity": "none",
     "tags": [
       "landscape"
