@@ -872,7 +872,7 @@ a:focus-visible {
 .lightbox-caption > span {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 0.7em;
 }
 
 .lightbox-caption [hidden] {
@@ -894,10 +894,15 @@ a:focus-visible {
   color: var(--paper-muted);
 }
 
+.copy-link-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
 .copy-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -1128,6 +1133,7 @@ a:focus-visible {
     grid-column: 1;
     gap: 12px;
     padding-top: 0;
+    container-type: inline-size;
   }
 
   .lightbox-figure > img {
@@ -1138,18 +1144,27 @@ a:focus-visible {
 
   /* Pinned to the bottom edge. Top line: the muse (when there is one) and the
      copy link. Bottom line: date, type and count, with the copyright on the
-     right. If a phone is too narrow, the copyright drops to its own line. */
+     right. Every gap is in em and the text shrinks with the width of the
+     screen, so the longest realistic bottom line (--caption-fit ems wide)
+     always fits next to the copyright. */
   .lightbox-caption {
+    --caption-fit: 38.5;
     width: 100%;
     min-height: 0;
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 0 14px;
+    gap: 0 1.1em;
     padding-inline: 0;
-    font-size: 0.6rem;
-    letter-spacing: 0.05em;
+    font-size: clamp(8px, calc(100cqw / var(--caption-fit)), 0.6rem);
+    letter-spacing: 0.04em;
+    word-spacing: -0.1em;
     white-space: nowrap;
+  }
+
+  .lightbox-caption > div,
+  .lightbox-caption > span {
+    gap: 0.6em;
   }
 
   /* Forces the line break between the two lines. */

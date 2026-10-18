@@ -1126,21 +1126,26 @@
   }
 
   function handleTouchStart(event) {
-    if (lightboxOverlay.hidden || !mobileLightbox.matches || transitionRunning) return;
+    if (lightboxOverlay.hidden || !mobileLightbox.matches) return;
     if (event.target instanceof Element && event.target.closest("button, a")) return;
     const touch = event.changedTouches[0];
     touchStart = { x: touch.clientX, y: touch.clientY, offset: 0 };
     clearScrollCue();
-    pictureTargets().forEach((element) => element.getAnimations().forEach((animation) => animation.cancel()));
+    // A swipe made while a transition is playing still counts: it is queued by
+    // navigate() and runs once the current animation ends.
+    if (!transitionRunning) {
+      pictureTargets().forEach((element) => element.getAnimations().forEach((animation) => animation.cancel()));
+    }
   }
 
   function handleTouchMove(event) {
-    if (!touchStart || lightboxOverlay.hidden || transitionRunning) return;
+    if (!touchStart || lightboxOverlay.hidden) return;
     const touch = event.changedTouches[0];
     const dx = touch.clientX - touchStart.x;
     const dy = touch.clientY - touchStart.y;
     if (Math.abs(dx) > Math.abs(dy) * 1.15) return;
     event.preventDefault();
+    if (transitionRunning) return;
     const offset = Math.max(-96, Math.min(96, dy * 0.72));
     touchStart.offset = offset;
     setMotionStyles(
@@ -1161,6 +1166,7 @@
       navigate(dy < 0 ? 1 : -1, offset);
       return;
     }
+    if (transitionRunning) return;
     const picture = pictureTargets();
     picture.forEach((element) => {
       element.animate(
