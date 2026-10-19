@@ -1278,6 +1278,28 @@ a:focus-visible {
     display: none;
   }
 
+  /* Half the desktop size and closer to the top edge (10px below it, or just
+     below the notch). Fixed to the screen so the dialog's overflow clipping
+     cannot cut it off; the invisible ::after keeps a 44px touch target. */
+  .lightbox-close {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    width: 24px;
+    height: 24px;
+  }
+
+  .lightbox-close::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+  }
+
+  .lightbox-close .ui-icon {
+    width: 0.55rem;
+    height: 0.55rem;
+  }
+
   .lightbox-scroll-cue {
     position: absolute;
     left: 50%;
