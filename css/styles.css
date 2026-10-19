@@ -139,8 +139,7 @@ a:focus-visible {
 
 .introduction,
 .gallery-section,
-.site-footer,
-.empty-gallery {
+.site-footer {
   width: min(100%, var(--max-width));
   margin-inline: auto;
   padding-inline: var(--page-pad);
@@ -677,25 +676,6 @@ a:focus-visible {
   font-size: 0.58rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-}
-
-.empty-gallery {
-  min-height: 56vh;
-  display: grid;
-  align-content: center;
-  justify-items: start;
-  border-top: 1px solid var(--line);
-}
-
-.empty-gallery h2 {
-  margin: 18px 0 4px;
-  font-family: Iowan Old Style, Baskerville, "Times New Roman", serif;
-  font-size: clamp(2rem, 5vw, 5rem);
-  font-weight: 400;
-}
-
-.empty-gallery > p:last-child {
-  color: var(--paper-muted);
 }
 
 .javascript-notice {

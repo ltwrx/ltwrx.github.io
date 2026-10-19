@@ -798,7 +798,8 @@
     document.body.append(probe);
 
     const part = (selector) => probe.querySelector(selector);
-    const widest = (element, values) => values.reduce((max, value) => {
+    // Each measurement forces a layout, so every distinct string is measured once.
+    const widest = (element, values) => [...new Set(values)].reduce((max, value) => {
       element.textContent = value;
       return Math.max(max, element.getBoundingClientRect().width);
     }, 0);
@@ -818,7 +819,16 @@
       - date.getBoundingClientRect().width - tags.getBoundingClientRect().width;
     const infoWidth = dateWidth + infoGap + tagsWidth;
 
-    const countWidth = widest(part(".lightbox-count > span"), photos.map((_, index) => captionCount(index)));
+    // Counts differ only in their digits: find the widest digit and measure the
+    // count written with it, instead of all of them.
+    const count = part(".lightbox-count > span");
+    const widestDigit = [..."0123456789"].reduce((best, digit) => {
+      count.textContent = digit;
+      const width = count.getBoundingClientRect().width;
+      return width > best.width ? { digit, width } : best;
+    }, { digit: "0", width: 0 }).digit;
+    const total = String(photos.length).padStart(2, "0");
+    const countWidth = widest(count, [`${widestDigit.repeat(total.length)} / ${total}`]);
     const creditWidth = part(".lightbox-credit").getBoundingClientRect().width;
 
     const muse = part(".lightbox-muse");
