@@ -820,12 +820,6 @@ a:focus-visible {
   display: contents;
 }
 
-/* Registered so the mobile edge fade can grow and shrink smoothly. */
-@property --stage-fade {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
 
 .lightbox-stage > img {
   grid-column: 1;
@@ -1164,7 +1158,7 @@ a:focus-visible {
   .lightbox-dialog {
     grid-template-columns: 1fr;
     align-items: stretch;
-    padding: 18px 0 0;
+    padding: 6px 0 0;
     overflow: hidden;
   }
 
@@ -1181,12 +1175,13 @@ a:focus-visible {
     background: #040404;
   }
 
-  /* The picture moves inside this frame. While it is moving (a swipe or a
-     transition, see .is-moving), a soft band at the top and bottom edges
-     fades it into the background, so a photograph sliding in or out never
-     runs over the caption or the close button. At rest the band shrinks to
-     nothing and the picture is shown unfaded. */
+  /* The picture moves inside this frame, which fades it into the background
+     over a fixed band at the top and bottom edges, so a photograph sliding in
+     or out passes under the band instead of running over the caption or the
+     close button. The band lies in the frame's padding, where the resting
+     picture never reaches, so a photograph at rest is never faded. */
   .lightbox-stage {
+    --stage-fade: 36px;
     grid-column: 1;
     grid-row: 1;
     align-self: stretch;
@@ -1197,7 +1192,7 @@ a:focus-visible {
     grid-template-rows: minmax(0, 1fr);
     grid-template-columns: minmax(0, 1fr);
     place-items: center;
-    padding: 14px 0;
+    padding: var(--stage-fade) 0;
     overflow: hidden;
     /* Eased stops instead of a straight ramp, so the band has no visible edge. */
     --stage-mask: linear-gradient(
@@ -1215,11 +1210,6 @@ a:focus-visible {
     );
     -webkit-mask-image: var(--stage-mask);
     mask-image: var(--stage-mask);
-    transition: --stage-fade 220ms ease;
-  }
-
-  .lightbox.is-moving .lightbox-stage {
-    --stage-fade: 72px;
   }
 
   .lightbox-stage > img {
