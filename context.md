@@ -53,6 +53,16 @@ away from it (it is counted only as `photo-link`). For sensitive work, never per
 visitor session, count.js ignores localhost, and failures are swallowed so the
 page never depends on the counter.
 
+## Link preview image
+
+`og-image/og-image.jpg` (1200 × 630) is the picture shown when the site's link
+is shared; `index.html` points to it with `og:image` and a large X card. It is
+rendered from `og-image/og-image.html`: the photographs are the gallery numbers
+in its `data-photos` attribute, `mosaic.js` lays them out (column offsets in
+`stagger`), and the title and shading are in its CSS. To regenerate it, run
+`pwsh -File og-image/render-og.ps1 -Dir og-image` (needs Chrome and an internet
+connection for the fonts). Keep it a JPG and keep sensitive work out of it.
+
 ## Replacing photographs
 
 Published photographs are metadata-stripped WebPs with matching thumbnails.

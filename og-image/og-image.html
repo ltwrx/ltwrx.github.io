@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&family=Inter:wght@500&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0c0c0c; }
+  .mosaic { position: absolute; inset: 0; }
+  .mosaic img { position: absolute; display: block; object-fit: cover; }
+  .shade { position: absolute; inset: 0; background:
+    radial-gradient(ellipse 62% 72% at 50% 50%, rgba(8,8,8,0.76), rgba(8,8,8,0.9)); }
+  .title { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; color: #eeeae3; }
+  h1 { margin: 0; font: 400 112px/1 "Libre Baskerville", serif; letter-spacing: -0.035em; }
+  p { margin: 0; font: 500 17px/1 Inter, sans-serif; letter-spacing: 0.42em; text-transform: uppercase; color: #cfc9bf; padding-left: 0.42em; }
+</style>
+</head>
+<body data-photos="04 02 10 32 12 56 07 47 72 93 08 81 09 79">
+  <div class="mosaic"></div>
+  <div class="shade"></div>
+  <div class="title">
+    <h1>Lightworks</h1>
+    <p>Portfolio</p>
+  </div>
+  <script src="../js/photos.js"></script>
+  <script src="mosaic.js"></script>
+</body>
+</html>
