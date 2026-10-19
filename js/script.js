@@ -99,6 +99,10 @@
   const VIEW_DWELL_MS = 1000;
   const analyticsQueue = [];
   let viewTimer = null;
+  // Only organic interest counts: a photograph someone arrived at through a
+  // shared link is not counted as viewed or closed on until they move away
+  // from it. Set once at page load; cleared on the first navigation.
+  let linkedArrivalId = null;
 
   function sendEvent(path, title) {
     try {
@@ -134,7 +138,7 @@
   // Blurred photographs are not counted until they are revealed.
   function scheduleViewTracking(index) {
     window.clearTimeout(viewTimer);
-    if (isGated(photos[index])) return;
+    if (isGated(photos[index]) || photos[index].id === linkedArrivalId) return;
     viewTimer = window.setTimeout(() => {
       if (activeIndex === index && !lightboxOverlay.hidden) trackPhoto("view", photos[index]);
     }, VIEW_DWELL_MS);
@@ -891,6 +895,7 @@
     }
 
     rememberFocus();
+    if (pushHistory) linkedArrivalId = null;  // Opened from the gallery: organic.
     activeIndex = index;
     openedWithPush = Boolean(pushHistory || window.history.state?.portfolioPhoto);
     renderLightbox(photo, index);
@@ -953,7 +958,10 @@
   function hideLightbox(restore = true) {
     window.clearTimeout(viewTimer);
     // restore is false only when the lightbox is swapped for the content notice.
-    if (restore && activeIndex !== null) trackPhoto("close", photos[activeIndex]);
+    if (restore && activeIndex !== null && photos[activeIndex].id !== linkedArrivalId) {
+      trackPhoto("close", photos[activeIndex]);
+    }
+    linkedArrivalId = null;
     clearScrollCue();
     navigationQueue.length = 0;
     lightboxOverlay.hidden = true;
@@ -983,6 +991,7 @@
   }
 
   function commitNavigation(candidate) {
+    linkedArrivalId = null;
     activeIndex = candidate;
     const photo = photos[candidate];
     const url = new URL(window.location.href);
@@ -1305,11 +1314,15 @@
   window.addEventListener("popstate", readUrl);
   document.querySelector("script[data-goatcounter]")?.addEventListener("load", flushAnalytics);
 
-  // Arrivals through a shared photo link. The pageview itself is always "/",
+  // Arrivals through a shared photo link are counted on their own, apart from
+  // the photograph's organic numbers. The pageview itself is always "/",
   // because count.js follows the canonical URL and drops the query string.
   const linkedPhoto = photos.find(
     (photo) => photo.id === new URLSearchParams(window.location.search).get("photo"),
   );
-  if (linkedPhoto) trackPhoto("link", linkedPhoto);
+  if (linkedPhoto) {
+    linkedArrivalId = linkedPhoto.id;
+    trackPhoto("link", linkedPhoto);
+  }
   readUrl();
 })();

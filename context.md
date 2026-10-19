@@ -46,7 +46,9 @@ with a subresource-integrity hash) and a few events sent from `js/script.js` by
 `photo-open/<file>` (gallery click), `photo-link/<file>` (arrived through a
 shared `?photo=` link), `photo-view/<file>` (on screen for 1 s in the lightbox,
 not counted while blurred), `photo-close/<file>` (lightbox closed on it) and
-`photo-copy-link/<file>`. For sensitive work, never per photograph:
+`photo-copy-link/<file>`. Only organic interest counts: the photograph a visitor
+arrived at through a shared link gets no view or close event until they move
+away from it (it is counted only as `photo-link`). For sensitive work, never per photograph:
 `nsfw-prompt`, `nsfw-shown` and `nsfw-kept-hidden`. Events are counted once per
 visitor session, count.js ignores localhost, and failures are swallowed so the
 page never depends on the counter.
