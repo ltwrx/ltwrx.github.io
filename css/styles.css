@@ -789,7 +789,11 @@ a:focus-visible {
   text-underline-offset: 4px;
 }
 
+/* Solid, not see-through: a 96% backdrop let the gallery behind show
+   through every photograph while it faded in or out, including the dark
+   seams between the gallery columns. */
 .lightbox {
+  background: #040404;
   touch-action: none;
 }
 
@@ -862,10 +866,11 @@ a:focus-visible {
 
 /* Sensitive photographs stay in the lightbox sequence, blurred, until the
    visitor accepts the content notice. The thumbnail is shown instead of the
-   full-size file, and the blur is much stronger than in the gallery because
-   the picture is displayed far larger. */
+   full-size file. The blur is set to look like the gallery's: the picture is
+   shown larger here, so the radius is larger in pixels but about the same
+   relative to the photograph. */
 .lightbox.is-gated .lightbox-stage > img {
-  filter: blur(clamp(22px, 4vmin, 40px)) saturate(0.72) brightness(0.6);
+  filter: blur(16px) saturate(0.72) brightness(0.64);
 }
 
 .lightbox-sensitive {
@@ -1169,12 +1174,6 @@ a:focus-visible {
     container-type: inline-size;
   }
 
-  /* Solid on mobile: at 96% the gallery behind showed through wherever the
-     picture fades out, including the seam between its two columns. */
-  .lightbox {
-    background: #040404;
-  }
-
   /* The picture moves inside this frame, which fades it into the background
      over a fixed band at the top and bottom edges, so a photograph sliding in
      or out passes under the band instead of running over the caption or the
@@ -1210,6 +1209,10 @@ a:focus-visible {
     );
     -webkit-mask-image: var(--stage-mask);
     mask-image: var(--stage-mask);
+  }
+
+  .lightbox.is-gated .lightbox-stage > img {
+    filter: blur(12px) saturate(0.72) brightness(0.64);
   }
 
   .lightbox-stage > img {
