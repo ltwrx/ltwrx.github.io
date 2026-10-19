@@ -987,6 +987,11 @@
     if (pushHistory) trackPhoto("open", photo);
 
     if (pushHistory) {
+      // Closing will go back through history. Browsers then restore the scroll
+      // position saved when the photograph was opened, after our popstate
+      // handler has moved the gallery to the last photograph viewed, and
+      // undo it. The page restores scroll itself until it is left or reloaded.
+      if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
       const url = new URL(window.location.href);
       url.searchParams.set("photo", photo.id);
       window.history.pushState(
@@ -1051,6 +1056,12 @@
     if (rect.top >= 0 && rect.bottom <= window.innerHeight) return;
     const top = window.scrollY + rect.top - (window.innerHeight - rect.height) / 2;
     window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+    // Some browsers restore a remembered scroll position late in a history
+    // traversal; if that moved the page, put it back once.
+    const settled = window.scrollY;
+    window.requestAnimationFrame(() => {
+      if (Math.abs(window.scrollY - settled) > 1) window.scrollTo({ top: settled, behavior: "instant" });
+    });
   }
 
   function hideLightbox(restore = true) {
@@ -1416,6 +1427,11 @@
   lightboxOverlay.addEventListener("touchcancel", handleTouchCancel, { passive: true });
   document.addEventListener("keydown", handleKeyboard);
   window.addEventListener("popstate", readUrl);
+  // Leaving or reloading the page: let the browser remember and restore the
+  // scroll position as usual again.
+  window.addEventListener("pagehide", () => {
+    if ("scrollRestoration" in window.history) window.history.scrollRestoration = "auto";
+  });
   document.querySelector("script[data-goatcounter]")?.addEventListener("load", flushAnalytics);
 
   // Arrivals through a shared photo link are counted on their own, apart from
