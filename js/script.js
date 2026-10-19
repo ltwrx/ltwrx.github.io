@@ -955,7 +955,21 @@
     };
   }
 
+  // After browsing in the lightbox, bring the gallery to the photograph the
+  // visitor ended on, centred on screen, unless it is already in full view.
+  // Focus returns to that card too, so keyboard users continue from there.
+  function revealCard(photo) {
+    const card = cards.get(photo.id)?.card;
+    if (!card) return;
+    lastFocusedElement = card;
+    const rect = card.getBoundingClientRect();
+    if (rect.top >= 0 && rect.bottom <= window.innerHeight) return;
+    const top = window.scrollY + rect.top - (window.innerHeight - rect.height) / 2;
+    window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+  }
+
   function hideLightbox(restore = true) {
+    const lastPhoto = activeIndex !== null ? photos[activeIndex] : null;
     window.clearTimeout(viewTimer);
     // restore is false only when the lightbox is swapped for the content notice.
     if (restore && activeIndex !== null && photos[activeIndex].id !== linkedArrivalId) {
@@ -973,7 +987,9 @@
     resetMotion(true);
     transitionRunning = false;
     unlockBody();
-    if (restore) restoreFocus();
+    if (!restore) return;
+    if (lastPhoto) revealCard(lastPhoto);
+    restoreFocus();
   }
 
   function closeLightbox() {
