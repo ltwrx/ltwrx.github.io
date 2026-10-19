@@ -820,6 +820,13 @@ a:focus-visible {
   display: contents;
 }
 
+/* Registered so the mobile edge fade can grow and shrink smoothly. */
+@property --stage-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .lightbox-stage > img {
   grid-column: 1;
   grid-row: 1;
@@ -1168,12 +1175,18 @@ a:focus-visible {
     container-type: inline-size;
   }
 
-  /* The picture moves inside this frame, which fades it to black over a
-     narrow band at the top and bottom edges. A photograph sliding in or out
-     therefore never runs over the caption or the close button. The bands sit
-     in margins the resting picture never reaches, so it is never faded. */
+  /* Solid on mobile: at 96% the gallery behind showed through wherever the
+     picture fades out, including the seam between its two columns. */
+  .lightbox {
+    background: #040404;
+  }
+
+  /* The picture moves inside this frame. While it is moving (a swipe or a
+     transition, see .is-moving), a soft band at the top and bottom edges
+     fades it into the background, so a photograph sliding in or out never
+     runs over the caption or the close button. At rest the band shrinks to
+     nothing and the picture is shown unfaded. */
   .lightbox-stage {
-    --stage-fade: 24px;
     grid-column: 1;
     grid-row: 1;
     align-self: stretch;
@@ -1184,10 +1197,29 @@ a:focus-visible {
     grid-template-rows: minmax(0, 1fr);
     grid-template-columns: minmax(0, 1fr);
     place-items: center;
-    padding: var(--stage-fade) 0;
+    padding: 14px 0;
     overflow: hidden;
-    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--stage-fade), #000 calc(100% - var(--stage-fade)), transparent);
-    mask-image: linear-gradient(to bottom, transparent, #000 var(--stage-fade), #000 calc(100% - var(--stage-fade)), transparent);
+    /* Eased stops instead of a straight ramp, so the band has no visible edge. */
+    --stage-mask: linear-gradient(
+      to bottom,
+      transparent 0,
+      rgba(0, 0, 0, 0.18) calc(var(--stage-fade) * 0.3),
+      rgba(0, 0, 0, 0.55) calc(var(--stage-fade) * 0.6),
+      rgba(0, 0, 0, 0.88) calc(var(--stage-fade) * 0.85),
+      #000 var(--stage-fade),
+      #000 calc(100% - var(--stage-fade)),
+      rgba(0, 0, 0, 0.88) calc(100% - var(--stage-fade) * 0.85),
+      rgba(0, 0, 0, 0.55) calc(100% - var(--stage-fade) * 0.6),
+      rgba(0, 0, 0, 0.18) calc(100% - var(--stage-fade) * 0.3),
+      transparent 100%
+    );
+    -webkit-mask-image: var(--stage-mask);
+    mask-image: var(--stage-mask);
+    transition: --stage-fade 220ms ease;
+  }
+
+  .lightbox.is-moving .lightbox-stage {
+    --stage-fade: 72px;
   }
 
   .lightbox-stage > img {

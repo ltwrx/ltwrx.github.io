@@ -1014,6 +1014,12 @@
     });
   }
 
+  // While the picture moves, the mobile stage fades it out at the frame edges
+  // (see .is-moving in the CSS); at rest the photograph is shown unfaded.
+  function setPictureMoving(moving) {
+    lightboxOverlay.classList.toggle("is-moving", moving);
+  }
+
   function resetMotion(cancelAnimations = false) {
     const targets = [lightboxFigure, ...pictureElements, ...captionLines()];
     if (cancelAnimations) {
@@ -1060,6 +1066,7 @@
     lightboxOverlay.classList.remove("is-gated");
     lightboxSensitive.hidden = true;
     resetMotion(true);
+    setPictureMoving(false);
     transitionRunning = false;
     unlockBody();
     if (!restore) return;
@@ -1122,6 +1129,7 @@
     const rollIn = `translate3d(0, ${direction > 0 ? "110%" : "-110%"}, 0)`;
     const rest = "translate3d(0, 0, 0)";
 
+    setPictureMoving(true);
     resetMotion();
     const exitOptions = { duration: mobile ? 210 : 240, easing: "cubic-bezier(0.55, 0, 1, 0.45)", fill: "forwards" };
     const exitAnimation = playMotion(picture, [
@@ -1179,6 +1187,7 @@
       if (!lightboxOverlay.hidden && activeIndex !== candidate) commitNavigation(candidate);
     } finally {
       resetMotion();
+      setPictureMoving(false);
       transitionRunning = false;
     }
 
@@ -1322,6 +1331,7 @@
     if (transitionRunning) return;
     const offset = Math.max(-96, Math.min(96, dy * 0.72));
     touchStart.offset = offset;
+    setPictureMoving(true);
     setMotionStyles(
       pictureTargets(),
       `translate3d(0, ${offset}px, 0)`,
@@ -1342,22 +1352,24 @@
     }
     if (transitionRunning) return;
     const picture = pictureTargets();
-    picture.forEach((element) => {
-      element.animate(
-        [
-          { transform: `translate3d(0, ${offset}px, 0)`, opacity: element.style.opacity || 1 },
-          { transform: "translate3d(0, 0, 0)", opacity: 1 },
-        ],
-        { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
-      );
-    });
+    const snapBack = picture.map((element) => element.animate(
+      [
+        { transform: `translate3d(0, ${offset}px, 0)`, opacity: element.style.opacity || 1 },
+        { transform: "translate3d(0, 0, 0)", opacity: 1 },
+      ],
+      { duration: 320, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+    ));
     clearMotionStyles(picture);
+    Promise.all(snapBack.map((animation) => animation.finished))
+      .then(() => { if (!touchStart && !transitionRunning) setPictureMoving(false); })
+      .catch(() => {});  // Cancelled by a new touch, which manages the fade itself.
   }
 
   function handleTouchCancel() {
     if (!touchStart) return;
     touchStart = null;
     clearMotionStyles(pictureTargets());
+    if (!transitionRunning) setPictureMoving(false);
   }
 
   applySiteContent();
