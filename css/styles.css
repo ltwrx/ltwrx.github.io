@@ -717,6 +717,7 @@ a:focus-visible {
 }
 
 .consent-backdrop {
+  z-index: 1010;
   background: rgba(4, 4, 4, 0.9);
   backdrop-filter: blur(14px);
 }
@@ -850,6 +851,31 @@ a:focus-visible {
 .lightbox-image-fallback .ui-icon {
   width: 2rem;
   height: 2rem;
+}
+
+/* Sensitive photographs stay in the lightbox sequence, blurred, until the
+   visitor accepts the content notice. The thumbnail is shown instead of the
+   full-size file, and the blur is much stronger than in the gallery because
+   the picture is displayed far larger. */
+.lightbox.is-gated .lightbox-figure > img {
+  filter: blur(clamp(22px, 4vmin, 40px)) saturate(0.72) brightness(0.6);
+}
+
+.lightbox-sensitive {
+  position: relative;
+  inset: auto;
+  grid-column: 1;
+  grid-row: 1;
+  place-self: center;
+  padding: 28px 44px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.lightbox-sensitive[hidden] {
+  display: none;
 }
 
 .lightbox-caption {

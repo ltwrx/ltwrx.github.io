@@ -33,7 +33,10 @@ To credit a model, add `"muse": "Name"` to a photograph's entry (or an array
 of names for several people). The lightbox shows it as `MUSE: NAME` just before
 the copyright line; photographs without the field show nothing.
 Sensitivity accepts `none`, `review` or `sensitive`; both gated values remain
-blurred until the visitor accepts the content notice.
+blurred until the visitor accepts the content notice. Gated photographs stay in
+the lightbox sequence: they appear heavily blurred (from the thumbnail, never
+the full file) with a "Sensitive work" button that opens the notice, and are
+revealed in place once it is accepted.
 
 ## Replacing photographs
 

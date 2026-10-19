@@ -16,6 +16,7 @@
   const lightboxCaption = document.querySelector(".lightbox-caption");
   const lightboxImage = document.querySelector("#lightbox-image");
   const lightboxImageFallback = document.querySelector("#lightbox-image-fallback");
+  const lightboxSensitive = document.querySelector("#lightbox-sensitive");
   const lightboxTitle = document.querySelector("#lightbox-title");
   const photoTitle = document.querySelector("#lightbox-photo-title");
   const photoDate = document.querySelector("#lightbox-date");
@@ -82,6 +83,11 @@
 
   function isGated(photo) {
     return photo.sensitivity !== "none" && !consentGranted;
+  }
+
+  // Gated photographs are shown from their small thumbnail, never the full file.
+  function lightboxSource(photo) {
+    return isGated(photo) ? thumbnailPath(photo.filename) : photoPath(photo.filename);
   }
 
   function setText(selector, value) {
@@ -669,7 +675,12 @@
     consentOverlay.hidden = true;
     pendingSensitiveId = null;
     unlockBody();
-    if (restore) restoreFocus();
+    if (!restore) return;
+    if (lightboxOverlay.hidden) {
+      restoreFocus();
+    } else {
+      closeButton.focus({ preventScroll: true });
+    }
   }
 
   function acceptSensitive() {
@@ -678,16 +689,22 @@
     } catch {
       // Consent remains active for this visit if browser storage is unavailable.
     }
-    if (pendingSensitiveId && new URLSearchParams(window.location.search).has("photo")) {
+    // With the lightbox open the photograph stays where it is and is revealed;
+    // otherwise the consent came from a gallery click or a direct link.
+    const lightboxOpen = !lightboxOverlay.hidden && activeIndex !== null;
+    if (!lightboxOpen && pendingSensitiveId && new URLSearchParams(window.location.search).has("photo")) {
       replaceCleanPhotoUrl();
     }
     consentGranted = true;
     updateGating();
     hideConsent(true);
+    if (lightboxOpen) renderLightbox(photos[activeIndex], activeIndex);
   }
 
   function dismissConsent() {
-    if (new URLSearchParams(window.location.search).has("photo")) replaceCleanPhotoUrl();
+    if (lightboxOverlay.hidden && new URLSearchParams(window.location.search).has("photo")) {
+      replaceCleanPhotoUrl();
+    }
     hideConsent(true);
   }
 
@@ -701,10 +718,15 @@
     lightboxTitle.textContent = title;
     lightboxImage.hidden = false;
     lightboxImageFallback.hidden = true;
-    lightboxImage.alt = photo.alt || "Untitled photograph";
+    const gated = isGated(photo);
+    lightboxOverlay.classList.toggle("is-gated", gated);
+    lightboxSensitive.hidden = !gated;
+    lightboxImage.alt = gated
+      ? "Sensitive artistic photograph, hidden until consent."
+      : photo.alt || "Untitled photograph";
     lightboxImage.width = photo.width;
     lightboxImage.height = photo.height;
-    lightboxImage.src = photoPath(photo.filename);
+    lightboxImage.src = lightboxSource(photo);
 
     setOptionalText(photoTitle, photo.title);
     const date = photo.captureMonth && photo.captureYear
@@ -758,7 +780,7 @@
 
   function preloadFullPhoto(photo) {
     if (!photo) return Promise.resolve(false);
-    const source = photoPath(photo.filename);
+    const source = lightboxSource(photo);
     if (readyFullImageSources.has(source)) return Promise.resolve(true);
     if (pendingFullImagePreloads.has(source)) return pendingFullImagePreloads.get(source);
 
@@ -786,13 +808,7 @@
   function preloadNeighboringPhotos(index) {
     if (index === null || photos.length < 2) return;
     [-1, 1].forEach((direction) => {
-      for (let step = 1; step <= photos.length; step += 1) {
-        const candidate = (index + direction * step + photos.length) % photos.length;
-        if (!isGated(photos[candidate])) {
-          void preloadFullPhoto(photos[candidate]);
-          break;
-        }
-      }
+      void preloadFullPhoto(photos[(index + direction + photos.length) % photos.length]);
     });
   }
 
@@ -844,7 +860,7 @@
   // Desktop slides the whole figure. On mobile the caption stays pinned to the
   // bottom edge: only the picture moves, while the lines that change from one
   // photograph to the next roll out and back in without leaving their place.
-  const pictureElements = [lightboxImage, lightboxImageFallback];
+  const pictureElements = [lightboxImage, lightboxImageFallback, lightboxSensitive];
   const pictureTargets = () => (mobileLightbox.matches ? pictureElements : [lightboxFigure]);
   const captionLines = () => Array.from(lightboxCaption.querySelectorAll(".lightbox-roll > *"));
   const captionRollTargets = () => (mobileLightbox.matches ? captionLines() : []);
@@ -886,6 +902,8 @@
     activeIndex = null;
     openedWithPush = false;
     lightboxImage.removeAttribute("src");
+    lightboxOverlay.classList.remove("is-gated");
+    lightboxSensitive.hidden = true;
     resetMotion(true);
     transitionRunning = false;
     unlockBody();
@@ -903,11 +921,7 @@
 
   function findNavigableIndex(direction) {
     if (activeIndex === null) return null;
-    for (let step = 1; step <= photos.length; step += 1) {
-      const candidate = (activeIndex + direction * step + photos.length) % photos.length;
-      if (!isGated(photos[candidate])) return candidate;
-    }
-    return null;
+    return (activeIndex + direction + photos.length) % photos.length;
   }
 
   function commitNavigation(candidate) {
@@ -1127,7 +1141,8 @@
 
   function handleTouchStart(event) {
     if (lightboxOverlay.hidden || !mobileLightbox.matches) return;
-    if (event.target instanceof Element && event.target.closest("button, a")) return;
+    // The sensitive-work button sits on top of the picture, so a swipe may start on it.
+    if (event.target instanceof Element && event.target.closest("button:not(.lightbox-sensitive), a")) return;
     const touch = event.changedTouches[0];
     touchStart = { x: touch.clientX, y: touch.clientY, offset: 0 };
     clearScrollCue();
@@ -1203,11 +1218,14 @@
   previousButton.addEventListener("click", () => navigate(-1));
   nextButton.addEventListener("click", () => navigate(1));
   copyButton.addEventListener("click", copyCurrentLink);
+  lightboxSensitive.addEventListener("click", () => {
+    if (activeIndex !== null) showConsent(photos[activeIndex]);
+  });
   lightboxImage.addEventListener("contextmenu", (event) => event.preventDefault());
   lightboxImage.addEventListener("load", () => {
     lightboxImage.hidden = false;
     lightboxImageFallback.hidden = true;
-    if (activeIndex !== null) readyFullImageSources.add(photoPath(photos[activeIndex].filename));
+    if (activeIndex !== null) readyFullImageSources.add(lightboxSource(photos[activeIndex]));
     preloadNeighboringPhotos(activeIndex);
   });
   lightboxImage.addEventListener("error", () => {
