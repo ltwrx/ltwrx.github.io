@@ -85,43 +85,59 @@
     return photo.sensitivity !== "none" && !consentGranted;
   }
 
-  // Anonymous usage counts (GoatCounter): which photographs are opened, viewed,
-  // closed on and shared, and how many visitors reveal sensitive work. Events are
-  // fire-and-forget and counted once per visitor session, and the counter ignores
-  // localhost. A missing, blocked or slow counter can never affect the page.
-  function track(event, photo) {
+  // Gated photographs are shown from their small thumbnail, never the full file.
+  function lightboxSource(photo) {
+    return isGated(photo) ? thumbnailPath(photo.filename) : photoPath(photo.filename);
+  }
+
+  // Analytics (GoatCounter). count.js sends each event with
+  // navigator.sendBeacon, so nothing here waits on the network or blocks the
+  // page. It loads async, so events raised before it is ready wait in a short
+  // queue; if it never loads (an ad blocker, say) they are simply dropped.
+  // count.js itself ignores localhost and browsers opted out with
+  // #toggle-goatcounter.
+  const VIEW_DWELL_MS = 1000;
+  const analyticsQueue = [];
+  let viewTimer = null;
+
+  function sendEvent(path, title) {
     try {
-      const counter = window.goatcounter;
-      if (!counter || typeof counter.count !== "function") return;
-      const name = photo ? `${event}/${String(photo.filename).replace(/\.[^.]+$/, "")}` : event;
-      counter.count({ path: name, title: name, event: true });
+      window.goatcounter.count({ path, title, event: true });
     } catch {
       // Analytics must never break the portfolio.
     }
   }
 
-  // A photograph only counts as viewed once it has stayed on screen for a moment,
-  // so flicking quickly through the sequence does not inflate the numbers.
-  const VIEW_COUNT_DELAY = 1000;
-  let viewCountTimer = null;
-
-  function scheduleViewCount(photo) {
-    cancelViewCount();
-    viewCountTimer = window.setTimeout(() => {
-      viewCountTimer = null;
-      track("view", photo);
-    }, VIEW_COUNT_DELAY);
+  function track(path, title) {
+    if (typeof window.goatcounter?.count === "function") {
+      sendEvent(path, title);
+    } else if (analyticsQueue.length < 20) {
+      analyticsQueue.push({ path, title });
+    }
   }
 
-  function cancelViewCount() {
-    if (viewCountTimer === null) return;
-    window.clearTimeout(viewCountTimer);
-    viewCountTimer = null;
+  function flushAnalytics() {
+    while (analyticsQueue.length && typeof window.goatcounter?.count === "function") {
+      const { path, title } = analyticsQueue.shift();
+      sendEvent(path, title);
+    }
   }
 
-  // Gated photographs are shown from their small thumbnail, never the full file.
-  function lightboxSource(photo) {
-    return isGated(photo) ? thumbnailPath(photo.filename) : photoPath(photo.filename);
+  // Events are keyed by file name, which stays the same when the gallery is reordered.
+  function trackPhoto(kind, photo) {
+    const name = String(photo.filename).replace(/\.[^.]+$/, "");
+    track(`photo-${kind}/${name}`, photo.alt || name);
+  }
+
+  // A photograph counts as viewed once it has stayed on screen for a moment,
+  // so swiping quickly through the lightbox does not count every frame passed.
+  // Blurred photographs are not counted until they are revealed.
+  function scheduleViewTracking(index) {
+    window.clearTimeout(viewTimer);
+    if (isGated(photos[index])) return;
+    viewTimer = window.setTimeout(() => {
+      if (activeIndex === index && !lightboxOverlay.hidden) trackPhoto("view", photos[index]);
+    }, VIEW_DWELL_MS);
   }
 
   function setText(selector, value) {
@@ -547,10 +563,7 @@
         placeholder.classList.add("is-hidden");
       });
       image.addEventListener("contextmenu", (event) => event.preventDefault());
-      card.addEventListener("click", () => {
-        track("open", photo);
-        openPhoto(index, true);
-      });
+      card.addEventListener("click", () => openPhoto(index, true));
 
       card.append(placeholder, image, fallback, sensitiveLabel, number);
       fragment.append(card);
@@ -703,6 +716,7 @@
     if (!consentOverlay.hidden) return;
     pendingSensitiveId = photo.id;
     rememberFocus();
+    track("nsfw-prompt", "Sensitive content notice shown");
     consentOverlay.hidden = false;
     lockBody();
     window.setTimeout(() => acceptSensitiveButton.focus({ preventScroll: true }), 0);
@@ -733,14 +747,14 @@
       replaceCleanPhotoUrl();
     }
     consentGranted = true;
-    track("nsfw/shown");
+    track("nsfw-shown", "Sensitive content revealed");
     updateGating();
     hideConsent(true);
     if (lightboxOpen) renderLightbox(photos[activeIndex], activeIndex);
   }
 
   function dismissConsent() {
-    track("nsfw/kept-hidden");
+    track("nsfw-kept-hidden", "Sensitive content kept hidden");
     if (lightboxOverlay.hidden && new URLSearchParams(window.location.search).has("photo")) {
       replaceCleanPhotoUrl();
     }
@@ -766,6 +780,7 @@
     lightboxImage.width = photo.width;
     lightboxImage.height = photo.height;
     lightboxImage.src = lightboxSource(photo);
+    scheduleViewTracking(index);
 
     setOptionalText(photoTitle, photo.title);
     const date = photo.captureMonth && photo.captureYear
@@ -879,6 +894,7 @@
     activeIndex = index;
     openedWithPush = Boolean(pushHistory || window.history.state?.portfolioPhoto);
     renderLightbox(photo, index);
+    if (pushHistory) trackPhoto("open", photo);
 
     if (pushHistory) {
       const url = new URL(window.location.href);
@@ -893,7 +909,6 @@
     lightboxOverlay.hidden = false;
     lockBody();
     showScrollCue();
-    scheduleViewCount(photo);
     window.setTimeout(() => closeButton.focus({ preventScroll: true }), 0);
   }
 
@@ -936,10 +951,10 @@
   }
 
   function hideLightbox(restore = true) {
-    clearScrollCue();
-    cancelViewCount();
+    window.clearTimeout(viewTimer);
     // restore is false only when the lightbox is swapped for the content notice.
-    if (restore && activeIndex !== null) track("close", photos[activeIndex]);
+    if (restore && activeIndex !== null) trackPhoto("close", photos[activeIndex]);
+    clearScrollCue();
     navigationQueue.length = 0;
     lightboxOverlay.hidden = true;
     activeIndex = null;
@@ -978,7 +993,6 @@
       `${url.pathname}${url.search}${url.hash}`,
     );
     renderLightbox(photo, candidate);
-    scheduleViewCount(photo);
   }
 
   async function animateNavigation(candidate, direction, dragOffset = 0) {
@@ -1176,7 +1190,7 @@
       copied = false;
     }
 
-    if (copied && activeIndex !== null) track("copy-link", photos[activeIndex]);
+    if (copied && activeIndex !== null) trackPhoto("copy-link", photos[activeIndex]);
     copyStatus.textContent = copied ? "Copied" : "Copy failed";
     if (copyResetTimer !== null) window.clearTimeout(copyResetTimer);
     copyResetTimer = window.setTimeout(() => {
@@ -1289,5 +1303,13 @@
   lightboxOverlay.addEventListener("touchcancel", handleTouchCancel, { passive: true });
   document.addEventListener("keydown", handleKeyboard);
   window.addEventListener("popstate", readUrl);
+  document.querySelector("script[data-goatcounter]")?.addEventListener("load", flushAnalytics);
+
+  // Arrivals through a shared photo link. The pageview itself is always "/",
+  // because count.js follows the canonical URL and drops the query string.
+  const linkedPhoto = photos.find(
+    (photo) => photo.id === new URLSearchParams(window.location.search).get("photo"),
+  );
+  if (linkedPhoto) trackPhoto("link", linkedPhoto);
   readUrl();
 })();
