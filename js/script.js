@@ -85,6 +85,40 @@
     return photo.sensitivity !== "none" && !consentGranted;
   }
 
+  // Anonymous usage counts (GoatCounter): which photographs are opened, viewed,
+  // closed on and shared, and how many visitors reveal sensitive work. Events are
+  // fire-and-forget and counted once per visitor session, and the counter ignores
+  // localhost. A missing, blocked or slow counter can never affect the page.
+  function track(event, photo) {
+    try {
+      const counter = window.goatcounter;
+      if (!counter || typeof counter.count !== "function") return;
+      const name = photo ? `${event}/${String(photo.filename).replace(/\.[^.]+$/, "")}` : event;
+      counter.count({ path: name, title: name, event: true });
+    } catch {
+      // Analytics must never break the portfolio.
+    }
+  }
+
+  // A photograph only counts as viewed once it has stayed on screen for a moment,
+  // so flicking quickly through the sequence does not inflate the numbers.
+  const VIEW_COUNT_DELAY = 1000;
+  let viewCountTimer = null;
+
+  function scheduleViewCount(photo) {
+    cancelViewCount();
+    viewCountTimer = window.setTimeout(() => {
+      viewCountTimer = null;
+      track("view", photo);
+    }, VIEW_COUNT_DELAY);
+  }
+
+  function cancelViewCount() {
+    if (viewCountTimer === null) return;
+    window.clearTimeout(viewCountTimer);
+    viewCountTimer = null;
+  }
+
   // Gated photographs are shown from their small thumbnail, never the full file.
   function lightboxSource(photo) {
     return isGated(photo) ? thumbnailPath(photo.filename) : photoPath(photo.filename);
@@ -513,7 +547,10 @@
         placeholder.classList.add("is-hidden");
       });
       image.addEventListener("contextmenu", (event) => event.preventDefault());
-      card.addEventListener("click", () => openPhoto(index, true));
+      card.addEventListener("click", () => {
+        track("open", photo);
+        openPhoto(index, true);
+      });
 
       card.append(placeholder, image, fallback, sensitiveLabel, number);
       fragment.append(card);
@@ -696,12 +733,14 @@
       replaceCleanPhotoUrl();
     }
     consentGranted = true;
+    track("nsfw/shown");
     updateGating();
     hideConsent(true);
     if (lightboxOpen) renderLightbox(photos[activeIndex], activeIndex);
   }
 
   function dismissConsent() {
+    track("nsfw/kept-hidden");
     if (lightboxOverlay.hidden && new URLSearchParams(window.location.search).has("photo")) {
       replaceCleanPhotoUrl();
     }
@@ -854,6 +893,7 @@
     lightboxOverlay.hidden = false;
     lockBody();
     showScrollCue();
+    scheduleViewCount(photo);
     window.setTimeout(() => closeButton.focus({ preventScroll: true }), 0);
   }
 
@@ -897,6 +937,9 @@
 
   function hideLightbox(restore = true) {
     clearScrollCue();
+    cancelViewCount();
+    // restore is false only when the lightbox is swapped for the content notice.
+    if (restore && activeIndex !== null) track("close", photos[activeIndex]);
     navigationQueue.length = 0;
     lightboxOverlay.hidden = true;
     activeIndex = null;
@@ -935,6 +978,7 @@
       `${url.pathname}${url.search}${url.hash}`,
     );
     renderLightbox(photo, candidate);
+    scheduleViewCount(photo);
   }
 
   async function animateNavigation(candidate, direction, dragOffset = 0) {
@@ -1132,6 +1176,7 @@
       copied = false;
     }
 
+    if (copied && activeIndex !== null) track("copy-link", photos[activeIndex]);
     copyStatus.textContent = copied ? "Copied" : "Copy failed";
     if (copyResetTimer !== null) window.clearTimeout(copyResetTimer);
     copyResetTimer = window.setTimeout(() => {

@@ -38,6 +38,16 @@ the lightbox sequence: they appear heavily blurred (from the thumbnail, never
 the full file) with a "Sensitive work" button that opens the notice, and are
 revealed in place once it is accepted.
 
+## Analytics
+
+GoatCounter counts page visits (script in `index.html`) and a few events sent
+from `js/script.js` by `track()`: `open/<file>` (gallery click), `view/<file>`
+(photograph on screen for 1 s in the lightbox), `close/<file>` (lightbox closed
+on it), `copy-link/<file>`, and `nsfw/shown` / `nsfw/kept-hidden` (content
+notice, not per photograph). Events are counted once per visitor session, the
+counter ignores localhost, and failures are swallowed so the page never depends
+on it. Event names use the file name without extension.
+
 ## Replacing photographs
 
 Published photographs are metadata-stripped WebPs with matching thumbnails.
