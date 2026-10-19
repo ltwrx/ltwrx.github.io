@@ -1,2 +1,14 @@
+# Link-preview bots may read the page so shared links show a title and image.
+User-agent: Twitterbot
+User-agent: facebookexternalhit
+User-agent: Facebot
+User-agent: LinkedInBot
+User-agent: Slackbot-LinkExpanding
+User-agent: Discordbot
+User-agent: TelegramBot
+User-agent: WhatsApp
+Allow: /
+
+# Everything else, including search engines, stays out.
 User-agent: *
 Disallow: /
