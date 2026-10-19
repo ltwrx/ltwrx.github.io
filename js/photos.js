@@ -1270,7 +1270,7 @@ window.PORTFOLIO_PHOTOS = [
   {
     "id": "403305",
     "filename": "figure-chest-deep-reed-lake.webp",
-    "muse": "LAURENCJA",
+    "muse": "KARASU",
     "width": 2134,
     "height": 3200,
     "captureMonth": "July",
