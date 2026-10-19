@@ -814,7 +814,13 @@ a:focus-visible {
   will-change: transform, opacity;
 }
 
-.lightbox-figure > img {
+/* On desktop the stage is transparent to layout; on mobile it frames the
+   moving picture (see the mobile rules). */
+.lightbox-stage {
+  display: contents;
+}
+
+.lightbox-stage > img {
   grid-column: 1;
   grid-row: 1;
   display: block;
@@ -857,7 +863,7 @@ a:focus-visible {
    visitor accepts the content notice. The thumbnail is shown instead of the
    full-size file, and the blur is much stronger than in the gallery because
    the picture is displayed far larger. */
-.lightbox.is-gated .lightbox-figure > img {
+.lightbox.is-gated .lightbox-stage > img {
   filter: blur(clamp(22px, 4vmin, 40px)) saturate(0.72) brightness(0.6);
 }
 
@@ -1151,18 +1157,40 @@ a:focus-visible {
   .lightbox-dialog {
     grid-template-columns: 1fr;
     align-items: stretch;
-    padding: 42px 0 0;
+    padding: 18px 0 0;
     overflow: hidden;
   }
 
   .lightbox-figure {
     grid-column: 1;
-    gap: 12px;
+    gap: 0;
     padding-top: 0;
     container-type: inline-size;
   }
 
-  .lightbox-figure > img {
+  /* The picture moves inside this frame, which fades it to black over a
+     narrow band at the top and bottom edges. A photograph sliding in or out
+     therefore never runs over the caption or the close button. The bands sit
+     in margins the resting picture never reaches, so it is never faded. */
+  .lightbox-stage {
+    --stage-fade: 24px;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: stretch;
+    justify-self: stretch;
+    min-width: 0;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
+    padding: var(--stage-fade) 0;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--stage-fade), #000 calc(100% - var(--stage-fade)), transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 var(--stage-fade), #000 calc(100% - var(--stage-fade)), transparent);
+  }
+
+  .lightbox-stage > img {
     max-height: 100%;
     border-radius: var(--photo-radius);
     clip-path: inset(0 round var(--photo-radius));
@@ -1171,8 +1199,9 @@ a:focus-visible {
   /* Pinned to the bottom edge. Top line: the muse (when there is one) and the
      copy link. Bottom line: date, type and count, with the copyright on the
      right. Every gap is in em and the text shrinks with the width of the
-     screen, so the longest realistic bottom line (--caption-fit ems wide)
-     always fits next to the copyright. */
+     screen. --caption-fit is the width, in ems, of the longest line any
+     photograph can produce; script.js measures it in the fonts the device
+     really uses, so both lines always stay on one row. */
   .lightbox-caption {
     --caption-fit: 38.5;
     width: 100%;
@@ -1182,7 +1211,7 @@ a:focus-visible {
     justify-content: flex-start;
     gap: 0 1.1em;
     padding-inline: 0;
-    font-size: clamp(8px, calc(100cqw / var(--caption-fit)), 0.6rem);
+    font-size: min(0.6rem, calc(100cqw / var(--caption-fit)));
     letter-spacing: 0.04em;
     word-spacing: -0.1em;
     white-space: nowrap;
@@ -1207,7 +1236,6 @@ a:focus-visible {
     flex-wrap: nowrap;
     min-width: 0;
     gap: 0.6em;
-    white-space: normal;
   }
 
   .lightbox-caption > .copy-link {
@@ -1224,8 +1252,8 @@ a:focus-visible {
   .lightbox-caption > .lightbox-info {
     order: 4;
     flex: 0 1 auto;
+    flex-wrap: nowrap;
     min-width: 0;
-    white-space: normal;
   }
 
   .lightbox-caption > .lightbox-count {
@@ -1248,7 +1276,9 @@ a:focus-visible {
   .lightbox-scroll-cue {
     position: absolute;
     left: 50%;
-    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 56px);
+    /* The arrows sit on the muse / copy-link line, the label just above it,
+       below the picture's bottom fade, so the cue never covers a photograph. */
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 10px);
     z-index: 4;
     display: flex;
     flex-direction: column;
@@ -1266,7 +1296,7 @@ a:focus-visible {
     transform: translate3d(-50%, 0, 0);
   }
 
-  .lightbox.show-scroll-cue .lightbox-figure > img {
+  .lightbox.show-scroll-cue .lightbox-stage > img {
     animation: mobile-picture-nudge 1100ms cubic-bezier(0.22, 1, 0.36, 1) 620ms 1;
   }
 

@@ -765,6 +765,86 @@
     hideConsent(true);
   }
 
+  function captionDate(photo) {
+    return photo.captureMonth && photo.captureYear
+      ? `${photo.captureMonth} ${photo.captureYear}`
+      : photo.captureYear
+        ? String(photo.captureYear)
+        : "";
+  }
+
+  function captionCount(index) {
+    return `${String(index + 1).padStart(2, "0")} / ${String(photos.length).padStart(2, "0")}`;
+  }
+
+  // On mobile each caption line must stay on one row on any phone, with any
+  // fonts and any text-size setting. Measure the widest content a photograph
+  // can produce, in the fonts this device really renders, and tell the CSS
+  // how many ems wide that is (--caption-fit); it then sizes the text to fit.
+  function fitCaption() {
+    if (!mobileLightbox.matches || photos.length === 0) return;
+    const probe = lightboxCaption.cloneNode(true);
+    probe.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+    probe.querySelectorAll("[hidden]").forEach((element) => { element.hidden = false; });
+    Object.assign(probe.style, {
+      position: "absolute",
+      left: "-10000px",
+      top: "0",
+      display: "block",
+      width: "max-content",
+      fontSize: "100px",
+      visibility: "hidden",
+    });
+    document.body.append(probe);
+
+    const part = (selector) => probe.querySelector(selector);
+    const widest = (element, values) => values.reduce((max, value) => {
+      element.textContent = value;
+      return Math.max(max, element.getBoundingClientRect().width);
+    }, 0);
+
+    const info = part(".lightbox-info");
+    const [title, date, tags] = info.children;
+    title.hidden = true;
+    tags.hidden = true;
+    const dateWidth = widest(date, photos.map(captionDate));
+    date.hidden = true;
+    tags.hidden = false;
+    const tagsWidth = widest(tags, photos.map((photo) => (photo.tags || []).join(" · ")));
+    date.hidden = false;
+    date.textContent = "x";
+    tags.textContent = "x";
+    const infoGap = info.getBoundingClientRect().width
+      - date.getBoundingClientRect().width - tags.getBoundingClientRect().width;
+    const infoWidth = dateWidth + infoGap + tagsWidth;
+
+    const countWidth = widest(part(".lightbox-count > span"), photos.map((_, index) => captionCount(index)));
+    const creditWidth = part(".lightbox-credit").getBoundingClientRect().width;
+
+    const muse = part(".lightbox-muse");
+    const museLabel = document.createElement("span");
+    const museName = document.createElement("span");
+    museName.className = "muse-name";
+    muse.replaceChildren(museLabel, museName);
+    museLabel.textContent = "Muses:";
+    const museWidth = widest(museName, photos.map((photo) => [].concat(photo.muse || []).join(", ")))
+      + museLabel.getBoundingClientRect().width
+      + Number.parseFloat(getComputedStyle(muse).columnGap || "0");
+    const copyWidth = widest(part(".copy-link-content > span:last-child"), ["Copy link", "Copied", "Copy failed"])
+      + part(".copy-link .ui-icon").getBoundingClientRect().width
+      + Number.parseFloat(getComputedStyle(part(".copy-link-content")).columnGap || "0");
+
+    const lineGap = Number.parseFloat(getComputedStyle(probe).columnGap || "0");
+    probe.remove();
+
+    const bottomLine = infoWidth + countWidth + creditWidth + lineGap * 2;
+    const topLine = museWidth + copyWidth + lineGap;
+    // 100px probe text, so the width in px / 100 is the width in ems; a few
+    // percent of slack absorbs rounding.
+    const ems = (Math.max(bottomLine, topLine) / 100) * 1.04;
+    lightboxCaption.style.setProperty("--caption-fit", ems.toFixed(2));
+  }
+
   function setOptionalText(element, value) {
     element.textContent = value || "";
     element.hidden = !value;
@@ -787,14 +867,9 @@
     scheduleViewTracking(index);
 
     setOptionalText(photoTitle, photo.title);
-    const date = photo.captureMonth && photo.captureYear
-      ? `${photo.captureMonth} ${photo.captureYear}`
-      : photo.captureYear
-        ? String(photo.captureYear)
-        : "";
-    setOptionalText(photoDate, date);
+    setOptionalText(photoDate, captionDate(photo));
     setOptionalText(photoTags, Array.isArray(photo.tags) ? photo.tags.join(" · ") : "");
-    photoCount.textContent = `${String(index + 1).padStart(2, "0")} / ${String(photos.length).padStart(2, "0")}`;
+    photoCount.textContent = captionCount(index);
 
     photoCredit.replaceChildren();
     const muses = [].concat(photo.muse || []).filter(Boolean);
@@ -1286,6 +1361,9 @@
   }
 
   applySiteContent();
+  fitCaption();
+  document.fonts?.ready.then(fitCaption);
+  mobileLightbox.addEventListener("change", fitCaption);
   createGallery();
   setupCustomCursor();
   setupCustomScrollbar();
